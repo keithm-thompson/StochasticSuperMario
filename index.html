@@ -4,10 +4,15 @@
   </head>
 
   <body>
-    <canvas></canvas>
+    <div style="position: relative;">
+      <canvas id="background-canvas"></canvas>
+      <canvas id="objects-canvas"></canvas>
+      <canvas id="characters-canvas"></canvas>
+    <div>
 
     <script type="application/javascript" src="vendor/keymaster.js"></script>
-    <script type="application/javascript" src="lib/bundle.js"></script>
+    <script type="application/javascript" src="app/assets/javascripts/bundle.js"></script>
     <script src="https://code.createjs.com/easeljs-0.8.2.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="app/assets/stylesheets/canvas.css" />
   </body>
 </html>
