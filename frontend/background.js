@@ -10,7 +10,6 @@ class Background {
     let floor = {};
     const floorImage = new Image();
 
-    floor.context = this.ctx;
     floor.width = 32;
     floor.height = 15;
     floorImage.onload = () => {
@@ -26,7 +25,6 @@ class Background {
     let cloud = {};
     const cloudImage = new Image();
 
-    cloud.context = this.ctx;
     cloud.width = 45;
     cloud.height = 28;
 
@@ -44,7 +42,6 @@ class Background {
     let grass = {};
     const grassImage = new Image();
 
-    grass.context = this.ctx;
     grass.width = 38;
     grass.height = 15;
 
