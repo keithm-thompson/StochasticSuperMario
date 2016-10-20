@@ -1,5 +1,6 @@
 import Background from './background';
-import Characters from './characters';
+import CharactersStage from './characters_stage';
+import ObjectsStage from './objects_stage';
 
 document.addEventListener("DOMContentLoaded", function(){
   const backgroundCanvas = document.getElementById("background-canvas");
@@ -18,7 +19,11 @@ document.addEventListener("DOMContentLoaded", function(){
   const objectsCtx = objectsCanvas.getContext("2d");
   const charactersCtx = charactersCanvas.getContext("2d");
 
+  let objectsStage = new createjs.Stage("objects-canvas");
+  objectsStage = new ObjectsStage(objectsStage);
+
   const background = new Background(backgroundCtx);
-  let stage = new createjs.Stage("characters-canvas");
-  const characters = new Characters(stage);
+
+  let charactersStage = new createjs.Stage("characters-canvas");
+  charactersStage = new CharactersStage(charactersStage);
 });

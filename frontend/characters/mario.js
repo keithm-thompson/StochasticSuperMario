@@ -1,5 +1,8 @@
-class Mario {
-  constructor(stage){
+import Character from './character';
+
+class Mario extends Character {
+  constructor(stage, objectsStage){
+    super(objectsStage)
     this.stage = stage;
     this.pos = [20,370];
     this.horVel = 0;
@@ -53,7 +56,7 @@ class Mario {
   }
 
   handleKeyUp(e){
-    this.decelerate(e.keyCode);
+    this.shouldDecelerate = true;
   }
 
   handleTick(){
@@ -81,7 +84,11 @@ class Mario {
       this.mario.gotoAndStop("jump");
       this.mario.gotoAndStop("run");
       this.mario.gotoAndPlay("stand");
+      this.mario.width = 24;
       this.numJumps = 0;
+    }
+    if (this.horVel > 0 || this.verVel > 0) {
+      this.updatePosOnStage('mario', this.mario.x, this.mario.y, this.mario.width, this.mario.height);
     }
     this.stage.update();
   }
@@ -110,6 +117,7 @@ class Mario {
     this.mario =  new createjs.Sprite(spriteSheet);
     this.mario.y = 331;
     this.mario.x = 50;
+    this.mario.height = 39;
     this.stage.addChild(this.mario);
     this.mario.gotoAndPlay("stand");
     // this.stage.update();
@@ -120,6 +128,7 @@ class Mario {
     if (this.mario.y < 331 || this.keys[key] === "jump") {
       this.mario.gotoAndStop("stand");
       this.mario.gotoAndPlay("jump");
+      this.mario.width = 21;
     }
     else if ((
       this.horVel > 0 ||
@@ -128,6 +137,7 @@ class Mario {
       this.mario.currentAnimation === "stand") {
           this.mario.gotoAndStop("stand");
           this.mario.gotoAndPlay("run");
+          this.mario.width = 20;
     }
 
     if (this.keys[key] === "right") {
@@ -150,16 +160,5 @@ class Mario {
       this.numJumps += 1;
     }
   }
-  decelerate(key) {
-    this.shouldDecelerate = true;
-  }
 }
-
-Mario.MOVES = {
-  "a": [1,  0],
-  "d": [-1,  0],
-  "right": [ 1,  0],
-  "left": [ -1,  0],
-  "space": [-1,  -1]
-};
 export default Mario;
