@@ -69,7 +69,7 @@ class Mario {
      }
     }
     if(this.mario.y < 331) {
-      this.mario.y += 2 ;
+      this.mario.y += 4 ;
     } else if (this.mario.y > 331) {
       this.mario.y = 331;
     }
@@ -100,7 +100,7 @@ class Mario {
       ],
       animations: {
         stand: 0,
-        run: [1,3, "run"],
+        run: [1,3, "run", .5],
         jump: [4, 4, "jump"]
       },
     };

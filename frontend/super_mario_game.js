@@ -1,6 +1,5 @@
 import Background from './background';
 import Characters from './characters';
-import MarioTest from './marioTest';
 
 document.addEventListener("DOMContentLoaded", function(){
   const backgroundCanvas = document.getElementById("background-canvas");
@@ -19,9 +18,7 @@ document.addEventListener("DOMContentLoaded", function(){
   const objectsCtx = objectsCanvas.getContext("2d");
   const charactersCtx = charactersCanvas.getContext("2d");
 
-  // const game = new Game();
   const background = new Background(backgroundCtx);
   let stage = new createjs.Stage("characters-canvas");
   const characters = new Characters(stage);
-  // const marioTest = new MarioTest(stage);
 });
