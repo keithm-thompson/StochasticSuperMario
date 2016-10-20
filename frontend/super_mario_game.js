@@ -1,6 +1,6 @@
-import GameView from './game_view';
 import Background from './background';
 import Characters from './characters';
+import MarioTest from './marioTest';
 
 document.addEventListener("DOMContentLoaded", function(){
   const backgroundCanvas = document.getElementById("background-canvas");
@@ -21,5 +21,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
   // const game = new Game();
   const background = new Background(backgroundCtx);
-  const characters = new Characters(charactersCtx);
+  let stage = new createjs.Stage("characters-canvas");
+  const characters = new Characters(stage);
+  // const marioTest = new MarioTest(stage);
 });
