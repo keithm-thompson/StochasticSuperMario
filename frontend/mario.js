@@ -14,6 +14,7 @@ class Mario {
     this.loadImage();
     createjs.Ticker.addEventListener("tick", this.handleTick);
     this.shouldDecelerate = true;
+    this.numJumps = 0;
   }
 
   setKeys(){
@@ -76,10 +77,11 @@ class Mario {
     this.mario.y -= this.verVel;
     this.mario.x += this.mario.scaleX * this.horVel;
 
-    if( this.horVel === 0 && this.mario.y === 331) {
+    if( this.horVel === 0 && this.mario.y <= 331) {
       this.mario.gotoAndStop("jump");
       this.mario.gotoAndStop("run");
       this.mario.gotoAndPlay("stand");
+      this.numJumps = 0;
     }
     this.stage.update();
   }
@@ -100,7 +102,7 @@ class Mario {
       ],
       animations: {
         stand: 0,
-        run: [1,3, "run", .5],
+        run: [1,3, "run", .1],
         jump: [4, 4, "jump"]
       },
     };
@@ -119,9 +121,13 @@ class Mario {
       this.mario.gotoAndStop("stand");
       this.mario.gotoAndPlay("jump");
     }
-    else if (this.horVel > 0 || this.keys[key] === "right" || this.keys[key] === "left") {
-      this.mario.gotoAndStop("stand");
-      this.mario.gotoAndPlay("run");
+    else if ((
+      this.horVel > 0 ||
+      this.keys[key] === "right" ||
+      this.keys[key] === "left") &&
+      this.mario.currentAnimation === "stand") {
+          this.mario.gotoAndStop("stand");
+          this.mario.gotoAndPlay("run");
     }
 
     if (this.keys[key] === "right") {
@@ -139,8 +145,9 @@ class Mario {
       } else {
       this.horVel += 1;
       }
-    } else if (this.keys[key] === "jump") {
+    } else if (this.keys[key] === "jump" && this.numJumps < 2) {
       this.verVel += 15;
+      this.numJumps += 1;
     }
   }
   decelerate(key) {
