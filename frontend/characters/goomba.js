@@ -31,11 +31,12 @@ class Goomba extends Character{
       this.goomba.gotoAndPlay("squashed");
     } else {
       this.intervalTreeX.removeInterval(this.goomba.x, this.goomba.x + this.goomba.width, "goomba");
+      this.intervalTreeY.removeInterval(this.goomba.y, this.goomba.y + this.goomba.height, "goomba");
       this.goomba.x += 1;
       this.intervalTreeX.insertInterval(this.goomba.x, this.goomba.x + this.goomba.width, "goomba");
+      this.intervalTreeY.insertInterval(this.goomba.y, this.goomba.y + this.goomba.height, "goomba");
       this.stage.update();
     }
-
   }
 
   imageLoaded() {
@@ -58,6 +59,7 @@ class Goomba extends Character{
     this.goomba.y = this.pos[1] - 31;
     this.goomba.x = 100;
     this.goomba.width = 22;
+    this.goomba.height = 31;
     createjs.Ticker.framerate = 25;
     this.stage.addChild(this.goomba);
     this.goomba.gotoAndPlay("move");

@@ -1,8 +1,12 @@
-import { objectIntervalTreeX } from '../interval_tree';
+import {
+  objectIntervalTreeX,
+  objectIntervalTreeY
+} from '../interval_tree';
 
 class MarioObject {
   constructor(stage) {
     this.intervalTreeX = objectIntervalTreeX;
+    this.intervalTreeY = objectIntervalTreeY;
   }
 }
 

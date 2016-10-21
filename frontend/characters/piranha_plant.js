@@ -42,7 +42,7 @@ class PiranhaPlant {
     };
     let spriteSheet = new createjs.SpriteSheet(spriteData);
     this.piranhaPlant =  new createjs.Sprite(spriteSheet);
-    this.piranhaPlant.y = this.pos[1] - 81;
+    this.piranhaPlant.y = this.pos[1] - 90;
     this.piranhaPlant.x = 466;
     createjs.Ticker.framerate = 25;
     this.stage.addChild(this.piranhaPlant);

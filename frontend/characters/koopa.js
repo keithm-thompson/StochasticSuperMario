@@ -31,8 +31,10 @@ class Koopa extends Character{
       this.koopa.gotoAndPlay("squashed");
     } else {
       this.intervalTreeX.removeInterval(this.koopa.x, this.koopa.x + this.koopa.width, "koopa");
+      this.intervalTreeY.removeInterval(this.koopa.y, this.koopa.y + this.koopa.height, "koopa");
       this.koopa.x += 1;
       this.intervalTreeX.insertInterval(this.koopa.x, this.koopa.x + this.koopa.width, "koopa");
+      this.intervalTreeY.insertInterval(this.koopa.y, this.koopa.y + this.koopa.height, "koopa");
       this.stage.update();
     }
 

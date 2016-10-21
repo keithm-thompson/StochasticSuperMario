@@ -104,4 +104,6 @@ class IntervalTree {
 }
 
 export const characterIntervalTreeX = new IntervalTree(350,350,"canvas");
-export const objectIntervalTreeX = new IntervalTree(350, 350, "canvas");
+export const characterIntervalTreeY = new IntervalTree(200,200,"canvas");
+export const objectIntervalTreeX = new IntervalTree(350, 250, "canvas");
+export const objectIntervalTreeY = new IntervalTree(200, 200, "canvas");

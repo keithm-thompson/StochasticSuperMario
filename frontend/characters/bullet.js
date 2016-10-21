@@ -25,8 +25,10 @@ class Bullet extends Character {
 
   handleTick(){
     this.intervalTreeX.removeInterval(this.bullet.x, this.bullet.x + this.bullet.width, "bullet");
+    this.intervalTreeY.removeInterval(this.bullet.y, this.bullet.y + this.bullet.height, "bullet");
     this.bullet.x += 4;
     this.intervalTreeX.insertInterval(this.bullet.x, this.bullet.x + this.bullet.width, "bullet");
+    this.intervalTreeY.insertInterval(this.bullet.y, this.bullet.y + this.bullet.height, "bullet");
     this.stage.update();
   }
 
@@ -35,7 +37,7 @@ class Bullet extends Character {
     let spriteData = {
       images: [loader.getResult("bullet")],
       frames: [
-        [798, 0, 25, 46]
+        [798, 25, 25, 20]
       ],
       animations: {
         stand: 0,
@@ -48,6 +50,7 @@ class Bullet extends Character {
     this.bullet.y = this.pos[1] - 100;
     this.bullet.x = -25;
     this.bullet.width = 25;
+    this.bullet.height = 20;
     this.bullet.scaleX = -1;
     createjs.Ticker.framerate = 25;
     // this.intervalTreeX.insertInterval(this.bullet.x, this.bullet.x + this.bullet.width, "bullet");
