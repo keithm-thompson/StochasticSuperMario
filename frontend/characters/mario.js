@@ -60,41 +60,54 @@ class Mario extends Character {
   }
 
   handleTick(){
-    if (this.shouldDecelerate) {
-      if (this.horVel > 0) {
-       this.horVel -= 2;
-     } else {
-       this.horVel = 0;
-     }
-      if (this.verVel > 0){
-       this.verVel -= 2;
-     } else {
-       this.verVel = 0;
-     }
+
+    if (this.shouldDecelerate && this.horVel > 0) {
+      this.horVel -= 3;
+    } else if (this.horVel < 0) {
+      this.horVel = 0;
     }
+    if (this.shouldDecelerate && this.verVel > 0) {
+      this.verVel -= 2;
+    } else if (this.verVel < 0) {
+      this.verVel = 0;
+    }
+
     if(this.mario.y < 331) {
       this.mario.y += 4 ;
     } else if (this.mario.y > 331) {
       this.mario.y = 331;
     }
-    this.mario.y -= this.verVel;
-    this.mario.x += this.mario.scaleX * this.horVel;
-    let collision, collision2;
+
+    let objectConst = 1;
+    let objectCollision, characterCollision;
+
     if (this.mario.scaleX === 1) {
-      collision = this.intervalTreeX.query(this.mario.x, this.mario.x + this.mario.width);
-      collision2 = this.objectIntervalTreeX.query(this.mario.x, this.mario.x + this.mario.width);
+      objectCollision = this.objectIntervalTreeX.query(this.mario.x, this.mario.x + this.mario.width);
+      characterCollision = this.intervalTreeX.query(this.mario.x, this.mario.x + this.mario.width);
     } else {
-      collision = this.intervalTreeX.query(this.mario.x , this.mario.x + this.mario.width );
-      collision2 = this.objectIntervalTreeX.query(this.mario.x - this.mario.width, this.mario.x);
-
+      objectCollision = this.objectIntervalTreeX.query(this.mario.x - this.mario.width, this.mario.x);
+      characterCollision = this.intervalTreeX.query(this.mario.x - this.mario.width, this.mario.x);
     }
-    if (collision2) {
-      console.log(collision2);
-      console.log(this.mario.x);
 
-      console.log(this.mario.x + this.mario.width);
+    if (this.mario.scaleX === 1 && !!objectCollision) {
+      if (this.mario.x + this.mario.width + this.horVel <= objectCollision[Object.keys(objectCollision)[0]][1]) {
+         objectConst = 0;
+         this.mario.x -= 2;
+      }
+    } else if (this.mario.scaleX === -1 && objectCollision) {
+        if (this.mario.x - this.mario.width + this.horVel >= objectCollision[Object.keys(objectCollision)[0]][0]) {
+         objectConst = 0;
+         this.mario.x += 2;
+        }
+       }
+
+    if (characterCollision) {
+      this.mario.y -= 15;
     }
-    if( this.horVel === 0 && this.mario.y <= 331) {
+      this.mario.y -= this.verVel;
+      this.mario.x += this.mario.scaleX * this.horVel * objectConst;
+
+    if( this.horVel === 0 && this.mario.y >= 331) {
       this.mario.gotoAndStop("jump");
       this.mario.gotoAndStop("run");
       this.mario.gotoAndPlay("stand");
@@ -153,16 +166,18 @@ class Mario extends Character {
       if (this.mario.scaleX === -1) {
         this.mario.scaleX = 1;
         this.mario.x -= 24;
-      } else {
-        this.horVel += 1;
+        this.horVel = 3;
+      } else if (this.horVel < 9) {
+        this.horVel += Mario.HORVEL;
       }
     }
     else if (this.keys[key] === "left") {
       if (this.mario.scaleX === 1) {
         this.mario.scaleX = -1;
         this.mario.x += 24;
-      } else {
-      this.horVel += 1;
+        this.horVel = 3;
+      } else if (this.horVel < 9){
+      this.horVel += Mario.HORVEL;
       }
     } else if (this.keys[key] === "jump" && this.numJumps < 2) {
       this.verVel += 15;
@@ -170,4 +185,6 @@ class Mario extends Character {
     }
   }
 }
+
+Mario.HORVEL = 3;
 export default Mario;

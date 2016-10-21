@@ -15,6 +15,9 @@ class IntervalTree {
     } else if (min > this.max) {
       return this.higherTree ?  this.higherTree.query(min, max) : null;
     } else {
+      if (Object.keys(this.overlappingIntervals).length === 1 && this.overlappingIntervals['canvas']) {
+        return null;
+      }
       return this.overlappingIntervals;
     }
   }
