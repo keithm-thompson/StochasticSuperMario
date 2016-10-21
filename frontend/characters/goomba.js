@@ -1,5 +1,8 @@
-class Goomba {
-  constructor(stage){
+import Character from './character';
+
+class Goomba extends Character{
+  constructor(stage, objectsStage){
+    super(objectsStage);
     this.stage = stage;
     this.pos = [50,370];
     this.horVel = 0;
@@ -23,10 +26,13 @@ class Goomba {
 
   handleTick(){
     if (this.goomba.x > 300) {
+      this.intervalTreeX.removeInterval(this.goomba.x, this.goomba.x + this.goomba.width, "goomba");
       this.goomba.gotoAndStop("move");
       this.goomba.gotoAndPlay("squashed");
     } else {
+      this.intervalTreeX.removeInterval(this.goomba.x, this.goomba.x + this.goomba.width, "goomba");
       this.goomba.x += 1;
+      this.intervalTreeX.insertInterval(this.goomba.x, this.goomba.x + this.goomba.width, "goomba");
       this.stage.update();
     }
 
@@ -51,6 +57,7 @@ class Goomba {
     this.goomba =  new createjs.Sprite(spriteSheet);
     this.goomba.y = this.pos[1] - 31;
     this.goomba.x = 100;
+    this.goomba.width = 22;
     createjs.Ticker.framerate = 25;
     this.stage.addChild(this.goomba);
     this.goomba.gotoAndPlay("move");

@@ -1,11 +1,9 @@
-class Objects {
+import WarpPipe from './objects/warp_pipe';
+
+class ObjectsStage {
   constructor(stage){
-
-  }
-
-  isObjectThere(x, y){
-    debugger
+    this.warp_pipe = new WarpPipe(stage);
   }
 }
 
-export default Objects;
+export default ObjectsStage;

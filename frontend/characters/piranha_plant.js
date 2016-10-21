@@ -22,8 +22,8 @@ class PiranhaPlant {
   }
 
   handleTick() {
-    this.piranhaPlant.y += 1;
-    this.stage.update();
+    // this.piranhaPlant.y += 1;
+    // this.stage.update();
   }
 
   imageLoaded() {
@@ -42,8 +42,8 @@ class PiranhaPlant {
     };
     let spriteSheet = new createjs.SpriteSheet(spriteData);
     this.piranhaPlant =  new createjs.Sprite(spriteSheet);
-    this.piranhaPlant.y = this.pos[1] - 46;
-    this.piranhaPlant.x = 450;
+    this.piranhaPlant.y = this.pos[1] - 81;
+    this.piranhaPlant.x = 466;
     createjs.Ticker.framerate = 25;
     this.stage.addChild(this.piranhaPlant);
     this.piranhaPlant.gotoAndPlay("move");

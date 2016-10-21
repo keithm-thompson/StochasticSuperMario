@@ -1,5 +1,8 @@
-class Koopa {
-  constructor(stage){
+import Character from './character';
+
+class Koopa extends Character{
+  constructor(stage, objectsStage){
+    super(objectsStage);
     this.stage = stage;
     this.pos = [50,370];
     this.horVel = 0;
@@ -23,10 +26,13 @@ class Koopa {
 
   handleTick(){
     if (this.koopa.x > 350) {
+      this.intervalTreeX.removeInterval(this.koopa.x, this.koopa.x + this.koopa.width, "koopa");
       this.koopa.gotoAndStop("move");
       this.koopa.gotoAndPlay("squashed");
     } else {
+      this.intervalTreeX.removeInterval(this.koopa.x, this.koopa.x + this.koopa.width, "koopa");
       this.koopa.x += 1;
+      this.intervalTreeX.insertInterval(this.koopa.x, this.koopa.x + this.koopa.width, "koopa");
       this.stage.update();
     }
 
@@ -51,6 +57,7 @@ class Koopa {
     this.koopa =  new createjs.Sprite(spriteSheet);
     this.koopa.y = this.pos[1] - 46;
     this.koopa.x = 150;
+    this.koopa.width = 22;
     createjs.Ticker.framerate = 25;
     this.stage.addChild(this.koopa);
     this.koopa.gotoAndPlay("move");

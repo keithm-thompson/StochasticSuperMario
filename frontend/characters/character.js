@@ -1,13 +1,10 @@
+import { characterIntervalTreeX, objectIntervalTreeX } from '../interval_tree';
 class Character {
   constructor(objectsStage) {
     this.objectsStage = objectsStage;
-  }
-
-  updatePosOnStage(character, x, y, width, height) {
-    debugger
+    this.intervalTreeX = characterIntervalTreeX;
+    this.objectIntervalTreeX = objectIntervalTreeX;
   }
 }
-Character.charactersOnStage = {};
-Character.areasOnStage = {};
 
 export default Character;

@@ -1,5 +1,8 @@
-class Bullet {
-  constructor(stage){
+import Character from './character';
+
+class Bullet extends Character {
+  constructor(stage, objectsStage){
+    super(objectsStage);
     this.stage = stage;
     this.pos = [50,370];
     this.horVel = 0;
@@ -21,7 +24,9 @@ class Bullet {
   }
 
   handleTick(){
+    this.intervalTreeX.removeInterval(this.bullet.x, this.bullet.x + this.bullet.width, "bullet");
     this.bullet.x += 4;
+    this.intervalTreeX.insertInterval(this.bullet.x, this.bullet.x + this.bullet.width, "bullet");
     this.stage.update();
   }
 
@@ -42,8 +47,10 @@ class Bullet {
     this.bullet =  new createjs.Sprite(spriteSheet);
     this.bullet.y = this.pos[1] - 100;
     this.bullet.x = -25;
+    this.bullet.width = 25;
     this.bullet.scaleX = -1;
     createjs.Ticker.framerate = 25;
+    // this.intervalTreeX.insertInterval(this.bullet.x, this.bullet.x + this.bullet.width, "bullet");
     this.stage.addChild(this.bullet);
     this.bullet.gotoAndPlay("stand");
     this.stage.update();
