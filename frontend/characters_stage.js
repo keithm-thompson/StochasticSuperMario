@@ -12,7 +12,24 @@ class CharactersStage {
     this.koopa = new Koopa(stage, objectsStage);
     this.bullet = new Bullet(stage, objectsStage);
     this.piranhaPlant = new PiranhaPlant(stage, objectsStage);
-    this.mario = new Mario(stage, objectsStage);
+    this.mario = new Mario(stage, objectsStage, this);
+    this.handleCharacterCollision = this.handleCharacterCollision.bind(this);
+  }
+
+  handleCharacterCollision(character){
+    switch (character) {
+      case "goomba":
+        this.goomba.handleCharacterCollision();
+        break;
+      case "koopa":
+        this.koopa.handleCharacterCollision();
+        break;
+      case "piranhaPlant":
+        this.mario.handleCharacterCollision();
+        break;
+      default:
+        alert('error');
+    }
   }
 
 }

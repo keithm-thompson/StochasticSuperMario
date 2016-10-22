@@ -53,7 +53,7 @@ class Bullet extends Character {
     this.bullet.height = 20;
     this.bullet.scaleX = -1;
     createjs.Ticker.framerate = 25;
-    // this.intervalTreeX.insertInterval(this.bullet.x, this.bullet.x + this.bullet.width, "bullet");
+
     this.stage.addChild(this.bullet);
     this.bullet.gotoAndPlay("stand");
     this.stage.update();

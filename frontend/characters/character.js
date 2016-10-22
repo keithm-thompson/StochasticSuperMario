@@ -10,7 +10,7 @@ class Character {
     this.intervalTreeX = characterIntervalTreeX;
     this.intervalTreeY = characterIntervalTreeY;
     this.objectIntervalTreeX = objectIntervalTreeX;
-    this.objectIntervalTreeY = objectIntervalTreeY;
+    this.objectIntervalTreeY   = objectIntervalTreeY;
   }
 }
 
