@@ -26,14 +26,14 @@ class PiranhaPlant extends Character {
 
   handleTick() {
     if(this.active) {
-      this.intervalTreeY.removeInterval(this.piranhaPlant.y, this.piranhaPlant.y + this.piranhaPlant.height, "piranhaPlant");
+      this.intervalTreeY.removeInterval(this.piranhaPlant.y + 2, this.piranhaPlant.y + this.piranhaPlant.height, "piranhaPlant");
       if(this.piranhaPlant.y <= this.pos[1] - 90) {
         this.direction = 1;
       } else if (this.piranhaPlant.y >= this.pos[1] - 45) {
         this.direction = -1;
       }
       this.piranhaPlant.y += this.direction * 1;
-      this.intervalTreeY.insertInterval(this.piranhaPlant.y, this.piranhaPlant.y + this.piranhaPlant.height, "piranhaPlant");
+      this.intervalTreeY.insertInterval(this.piranhaPlant.y + 2, this.piranhaPlant.y + this.piranhaPlant.height, "piranhaPlant");
     }
   }
 
@@ -55,10 +55,10 @@ class PiranhaPlant extends Character {
     this.piranhaPlant =  new createjs.Sprite(spriteSheet);
     this.piranhaPlant.y = this.pos[1] - 90;
     this.piranhaPlant.x = 466;
-    this.piranhaPlant.width = 22;
+    this.piranhaPlant.width = 20;
     this.piranhaPlant.height = 46;
     this.active = true;
-    this.intervalTreeX.insertInterval(this.piranhaPlant.x, this.piranhaPlant.x + this.piranhaPlant.width, "piranhaPlant");
+    this.intervalTreeX.insertInterval(this.piranhaPlant.x + 3, this.piranhaPlant.x + this.piranhaPlant.width - 3, "piranhaPlant");
     createjs.Ticker.framerate = 25;
     this.stage.addChild(this.piranhaPlant);
     this.piranhaPlant.gotoAndPlay("move");

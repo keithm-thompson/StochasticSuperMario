@@ -103,10 +103,12 @@ class Mario extends Character {
               if (this.verVel < 0 ) {
                 this.verVel = 0;
               }
+            } else if (this.mario.y + this.mario.height >= objectCollisionY[object][1]) {
+              this.verVel -= 15;
             } else if (this.mario.x + this.mario.width <= objectCollisionX[object][1]) {
               objectConst = 0;
               this.mario.x -= 2;
-            } else {
+            } else{
               objectConst = 0;
               this.mario.x += 2;
             }
@@ -117,8 +119,9 @@ class Mario extends Character {
       if(characterCollisionX && characterCollisionY) {
         Object.keys(characterCollisionX).forEach((character) => {
           if (characterCollisionY[character]) {
-            if (this.mario.y + this.mario.height <= characterCollisionY[character][0] + 5) {
+            if (this.mario.y + this.mario.height <= characterCollisionY[character][0] + 3) {
               this.charactersStage.handleCharacterCollision(character);
+              this.mario.y -= 20;
             } else {
               this.handleCharacterCollision();
             }
@@ -126,15 +129,19 @@ class Mario extends Character {
         });
       }
 
-        this.mario.y - this.verVel > 331 ? this.mario.y = 332 : this.mario.y -= this.verVel;
-        this.mario.x += this.mario.scaleX * this.horVel * objectConst;
-
-      if( this.horVel === 0 && this.verVel === 0) {
+      if (this.verVel === 0 && this.mario.currentAnimation === "jump") {
         this.mario.gotoAndStop("jump");
-        this.mario.gotoAndStop("run");
         this.mario.gotoAndPlay("stand");
         this.numJumps = 0;
+      } else if (this.horVel === 0 && this.mario.currentAnimation === "run") {
+        this.mario.gotoAndStop("run");
+        this.mario.gotoAndPlay("stand");
+      } else if (this.horVel !== 0 && this.mario.currentAnimation === "stand") {
+        this.mario.gotoAndStop("stand");
+        this.mario.gotoAndPlay("run");
       }
+        this.mario.y - this.verVel > 331 ? this.mario.y = 332 : this.mario.y -= this.verVel;
+        this.mario.x += this.mario.scaleX * this.horVel * objectConst;
       this.stage.update();
     }
   }
@@ -156,11 +163,11 @@ class Mario extends Character {
     let spriteData = {
       images: [loader.getResult("mario")],
       frames: [
-        [0, 0, 24, 39],
-        [25, 0, 20, 39],
-        [45, 0, 20, 39],
-        [65, 0, 20, 40],
-        [106, 0, 21,40],
+        [4, 0, 20, 38],
+        [25, 0, 20, 38],
+        [45, 0, 20, 38],
+        [65, 0, 20, 38],
+        [106, 0, 21, 38],
         [127, 0, 21, 40],
         [0, 0, 0, 0],
         [350, 0, 21, 39],
@@ -178,8 +185,8 @@ class Mario extends Character {
     this.mario =  new createjs.Sprite(spriteSheet);
     this.mario.y = 331;
     this.mario.x = 50;
-    this.mario.height = 39;
-    this.mario.width = 24;
+    this.mario.height = 38;
+    this.mario.width = 20;
     this.active = true;
     this.stage.addChild(this.mario);
     this.mario.gotoAndPlay("stand");
@@ -205,7 +212,7 @@ class Mario extends Character {
       if (this.keys[key] === "right") {
         if (this.mario.scaleX === -1) {
           this.mario.scaleX = 1;
-          this.mario.x -= 24;
+          this.mario.x -= this.mario.width;
           this.horVel = 3;
         } else if (this.horVel < 9) {
           this.horVel += Mario.HORVEL;
@@ -214,7 +221,7 @@ class Mario extends Character {
       else if (this.keys[key] === "left") {
         if (this.mario.scaleX === 1) {
           this.mario.scaleX = -1;
-          this.mario.x += 24;
+          this.mario.x += this.mario.width;
           this.horVel = 3;
         } else if (this.horVel < 9){
         this.horVel += Mario.HORVEL;

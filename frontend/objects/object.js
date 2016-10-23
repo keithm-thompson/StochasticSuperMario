@@ -1,4 +1,4 @@
-import {
+ import {
   objectIntervalTreeX,
   objectIntervalTreeY
 } from '../interval_tree';

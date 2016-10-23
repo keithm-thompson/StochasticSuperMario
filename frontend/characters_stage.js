@@ -27,6 +27,9 @@ class CharactersStage {
       case "piranhaPlant":
         this.mario.handleCharacterCollision();
         break;
+      case "bullet":
+        this.mario.handleCharacterCollision();
+        break;
       default:
         alert('error');
     }

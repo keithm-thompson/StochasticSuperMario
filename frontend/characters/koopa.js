@@ -25,11 +25,19 @@ class Koopa extends Character{
 
   handleTick(){
     if(this.active) {
+      if (this.koopa.scaleX === 1) {
         this.intervalTreeX.removeInterval(this.koopa.x, this.koopa.x + this.koopa.width, "koopa");
-        this.intervalTreeY.removeInterval(this.koopa.y, this.koopa.y + this.koopa.height, "koopa");
-        this.koopa.x -= this.koopa.scaleX * 1;
-        this.intervalTreeX.insertInterval(this.koopa.x, this.koopa.x + this.koopa.width, "koopa");
-        this.intervalTreeY.insertInterval(this.koopa.y, this.koopa.y + this.koopa.height, "koopa");
+        this.intervalTreeY.removeInterval(this.koopa.y + 5, this.koopa.y + this.koopa.height, "koopa");
+        this.koopa.x -= 1;
+        this.intervalTreeX.insertInterval(this.koopa.x, this.koopa.x +  + this.koopa.width, "koopa");
+        this.intervalTreeY.insertInterval(this.koopa.y + 5, this.koopa.y + this.koopa.height, "koopa");
+      } else {
+        this.intervalTreeX.removeInterval(this.koopa.x - this.koopa.width, this.koopa.x, "koopa");
+        this.intervalTreeY.removeInterval(this.koopa.y + 5, this.koopa.y + this.koopa.height, "koopa");
+        this.koopa.x += 1;
+        this.intervalTreeX.insertInterval(this.koopa.x - this.koopa.width, this.koopa.x, "koopa");
+        this.intervalTreeY.insertInterval(this.koopa.y + 5, this.koopa.y + this.koopa.height, "koopa");
+      }
         this.stage.update();
         this.detectObjectCollision();
       }
@@ -59,7 +67,7 @@ class Koopa extends Character{
       objectCollisionY = this.objectIntervalTreeY.query(this.koopa.y, this.koopa.y + this.koopa.height);
     } else {
       objectCollisionX = this.objectIntervalTreeX.query(this.koopa.x, this.koopa.x + this.koopa.width);
-      objectCollisionY = this.objectIntervalTreeY.query(this.koopa.y, this.koopa.y + this.koopa.height );
+      objectCollisionY = this.objectIntervalTreeY.query(this.koopa.y, this.koopa.y + this.koopa.height);
     }
 
     if(objectCollisionX && objectCollisionY) {
@@ -76,8 +84,8 @@ class Koopa extends Character{
     let spriteData = {
       images: [loader.getResult("koopa")],
       frames: [
-        [137, 10, 22, 35],
-        [160, 10, 22, 35],
+        [137, 12, 22, 34],
+        [160, 12, 22, 34],
         [229, 10, 22, 35]
       ],
       animations: {
@@ -88,10 +96,10 @@ class Koopa extends Character{
     };
     let spriteSheet = new createjs.SpriteSheet(spriteData);
     this.koopa =  new createjs.Sprite(spriteSheet);
-    this.koopa.y = this.pos[1] - 35;
+    this.koopa.y = this.pos[1] - 34;
     this.koopa.x = 150;
     this.koopa.width = 22;
-    this.koopa.height = 35;
+    this.koopa.height = 34;
     this.koopa.scaleX = -1;
     createjs.Ticker.framerate = 25;
     this.stage.addChild(this.koopa);
