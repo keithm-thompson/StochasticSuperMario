@@ -1,9 +1,10 @@
 import MarioObject from './object';
 
 export default class Block extends MarioObject {
-  constructor(stage, x, y) {
+  constructor(stage, id, x, y) {
     super();
     this.stage = stage;
+    this.id = id;
     this.pos = [x, y];
     this.imageLoaded = this.imageLoaded.bind(this);
     this.loadImage();
@@ -41,8 +42,8 @@ export default class Block extends MarioObject {
     this.block.y = this.pos[1];
     this.block.width = 15;
     this.block.height = 15;
-    this.intervalTreeX.insertInterval(this.block.x, this.block.x + this.block.width, "block");
-    this.intervalTreeY.insertInterval(this.block.y, this.block.y + this.block.height, "block");
+    this.intervalTreeX.insertInterval(this.block.x, this.block.x + this.block.width, "block", this.id);
+    this.intervalTreeY.insertInterval(this.block.y, this.block.y + this.block.height, "block", this.id);
     this.stage.addChild(this.block);
     this.block.gotoAndPlay("objectLight");
     this.stage.update();

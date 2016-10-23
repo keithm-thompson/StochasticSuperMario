@@ -19,11 +19,12 @@ document.addEventListener("DOMContentLoaded", function(){
   const charactersCtx = charactersCanvas.getContext("2d");
   const objectsCtx = objectsCanvas.getContext("2d");
 
-  let charactersStage = new createjs.Stage("characters-canvas");
-  charactersStage = new CharactersStage(charactersStage);
 
   let objectsStage = new createjs.Stage("objects-canvas");
   objectsStage = new ObjectsStage(objectsStage);
+
+  let charactersStage = new createjs.Stage("characters-canvas");
+  charactersStage = new CharactersStage(charactersStage, objectsStage);
 
   const background = new Background(backgroundCtx);
 

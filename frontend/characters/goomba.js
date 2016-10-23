@@ -1,9 +1,10 @@
 import Character from './character';
 
 class Goomba extends Character{
-  constructor(stage, objectsStage){
+  constructor(stage, objectsStage, id){
     super(objectsStage);
     this.stage = stage;
+    this.id = id;
     this.pos = [50,370];
     this.horVel = 0;
     this.verVel = 0;
@@ -26,11 +27,11 @@ class Goomba extends Character{
 
   handleTick(){
     if(this.active) {
-        this.intervalTreeX.removeInterval(this.goomba.x, this.goomba.x + this.goomba.width, "goomba");
-        this.intervalTreeY.removeInterval(this.goomba.y, this.goomba.y + this.goomba.height, "goomba");
+        this.intervalTreeX.removeInterval(this.goomba.x, this.goomba.x + this.goomba.width, "goomba", this.id);
+        this.intervalTreeY.removeInterval(this.goomba.y, this.goomba.y + this.goomba.height, "goomba", this.id);
         this.goomba.x += this.goomba.direction * 1;
-        this.intervalTreeX.insertInterval(this.goomba.x, this.goomba.x + this.goomba.width, "goomba");
-        this.intervalTreeY.insertInterval(this.goomba.y, this.goomba.y + this.goomba.height, "goomba");
+        this.intervalTreeX.insertInterval(this.goomba.x, this.goomba.x + this.goomba.width, "goomba", this.id);
+        this.intervalTreeY.insertInterval(this.goomba.y, this.goomba.y + this.goomba.height, "goomba", this.id);
         this.stage.update();
         this.detectObjectCollision();
       }
@@ -38,8 +39,8 @@ class Goomba extends Character{
 
   handleCharacterCollision() {
     this.active = false;
-    this.intervalTreeX.removeInterval(this.goomba.x, this.goomba.x + this.goomba.width, "goomba");
-    this.intervalTreeY.removeInterval(this.goomba.y, this.goomba.y + this.goomba.height, "goomba");
+    this.intervalTreeX.removeInterval(this.goomba.x, this.goomba.x + this.goomba.width, "goomba", this.id);
+    this.intervalTreeY.removeInterval(this.goomba.y, this.goomba.y + this.goomba.height, "goomba", this.id);
     this.squashedAnimation();
   }
 

@@ -1,9 +1,10 @@
 import Character from './character';
 
 class Bullet extends Character {
-  constructor(stage, objectsStage){
+  constructor(stage, objectsStage, id){
     super(objectsStage);
     this.stage = stage;
+    this.id = id;
     this.pos = [50,370];
     this.horVel = 0;
     this.verVel = 0;
@@ -25,17 +26,17 @@ class Bullet extends Character {
 
   handleTick(){
     if (this.bullet.scaleX === 1) {
-      this.intervalTreeX.removeInterval(this.bullet.x, this.bullet.x + this.bullet.width, "bullet");
-      this.intervalTreeY.removeInterval(this.bullet.y, this.bullet.y + this.bullet.height, "bullet");
+      this.intervalTreeX.removeInterval(this.bullet.x, this.bullet.x + this.bullet.width, "bullet", this.id);
+      this.intervalTreeY.removeInterval(this.bullet.y, this.bullet.y + this.bullet.height, "bullet", this.id);
       this.bullet.x -= 4;
-      this.intervalTreeX.insertInterval(this.bullet.x, this.bullet.x + this.bullet.width, "bullet");
-      this.intervalTreeY.insertInterval(this.bullet.y, this.bullet.y + this.bullet.height, "bullet");
+      this.intervalTreeX.insertInterval(this.bullet.x, this.bullet.x + this.bullet.width, "bullet", this.id);
+      this.intervalTreeY.insertInterval(this.bullet.y, this.bullet.y + this.bullet.height, "bullet", this.id);
     } else {
-      this.intervalTreeX.removeInterval(this.bullet.x - this.bullet.width, this.bullet.x, "bullet");
-      this.intervalTreeY.removeInterval(this.bullet.y, this.bullet.y + this.bullet.height, "bullet");
+      this.intervalTreeX.removeInterval(this.bullet.x - this.bullet.width, this.bullet.x, "bullet", this.id);
+      this.intervalTreeY.removeInterval(this.bullet.y, this.bullet.y + this.bullet.height, "bullet", this.id);
       this.bullet.x += 4;
-      this.intervalTreeX.insertInterval(this.bullet.x - this.bullet.width, this.bullet.x, "bullet");
-      this.intervalTreeY.insertInterval(this.bullet.y, this.bullet.y + this.bullet.height, "bullet");
+      this.intervalTreeX.insertInterval(this.bullet.x - this.bullet.width, this.bullet.x, "bullet", this.id);
+      this.intervalTreeY.insertInterval(this.bullet.y, this.bullet.y + this.bullet.height, "bullet", this.id);
     }
     this.stage.update();
   }

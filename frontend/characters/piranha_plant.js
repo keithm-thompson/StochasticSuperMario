@@ -1,9 +1,10 @@
 import Character from './character';
 
 class PiranhaPlant extends Character {
-  constructor(stage, objectsStage){
+  constructor(stage, objectsStage, id){
     super(objectsStage);
     this.stage = stage;
+    this.id = id;
     this.pos = [50,370];
     this.horVel = 0;
     this.verVel = 0;
@@ -26,14 +27,14 @@ class PiranhaPlant extends Character {
 
   handleTick() {
     if(this.active) {
-      this.intervalTreeY.removeInterval(this.piranhaPlant.y + 2, this.piranhaPlant.y + this.piranhaPlant.height, "piranhaPlant");
+      this.intervalTreeY.removeInterval(this.piranhaPlant.y + 2, this.piranhaPlant.y + this.piranhaPlant.height, "piranhaPlant", this.id);
       if(this.piranhaPlant.y <= this.pos[1] - 90) {
         this.direction = 1;
       } else if (this.piranhaPlant.y >= this.pos[1] - 45) {
         this.direction = -1;
       }
       this.piranhaPlant.y += this.direction * 1;
-      this.intervalTreeY.insertInterval(this.piranhaPlant.y + 2, this.piranhaPlant.y + this.piranhaPlant.height, "piranhaPlant");
+      this.intervalTreeY.insertInterval(this.piranhaPlant.y + 2, this.piranhaPlant.y + this.piranhaPlant.height, "piranhaPlant", this.id);
     }
   }
 

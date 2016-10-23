@@ -8,10 +8,10 @@ import ObjectsStage from './objects_stage';
 class CharactersStage {
   constructor(stage, objectsStage) {
     this.stage = stage;
-    this.goomba = new Goomba(stage, objectsStage);
-    this.koopa = new Koopa(stage, objectsStage);
-    this.bullet = new Bullet(stage, objectsStage);
-    this.piranhaPlant = new PiranhaPlant(stage, objectsStage);
+    this.goomba = new Goomba(stage, objectsStage, 1);
+    this.koopa = new Koopa(stage, objectsStage, 2);
+    this.bullet = new Bullet(stage, objectsStage, 3);
+    this.piranhaPlant = new PiranhaPlant(stage, objectsStage, 4);
     this.mario = new Mario(stage, objectsStage, this);
     this.handleCharacterCollision = this.handleCharacterCollision.bind(this);
   }

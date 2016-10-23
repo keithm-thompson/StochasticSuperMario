@@ -1,9 +1,10 @@
 import MarioObject from './object';
 
 class WarpPipe extends MarioObject {
-  constructor(stage) {
+  constructor(stage, id) {
     super();
     this.stage = stage;
+    this.id = id;
     this.pos = [50,370];
     this.imageLoaded  = this.imageLoaded.bind(this);
     this.loadImage();
@@ -37,8 +38,8 @@ class WarpPipe extends MarioObject {
   this.warp_pipe.x = 460;
   this.warp_pipe.width = 32;
   this.warp_pipe.height = 45;
-  this.intervalTreeX.insertInterval(this.warp_pipe.x, this.warp_pipe.x + this.warp_pipe.width, "warp_pipe");
-  this.intervalTreeY.insertInterval(this.warp_pipe.y, this.warp_pipe.y + this.warp_pipe.height, "warp_pipe");
+  this.intervalTreeX.insertInterval(this.warp_pipe.x, this.warp_pipe.x + this.warp_pipe.width, "warp_pipe", this.id)
+  this.intervalTreeY.insertInterval(this.warp_pipe.y, this.warp_pipe.y + this.warp_pipe.height, "warp_pipe", this.id);
   this.stage.addChild(this.warp_pipe);
   this.warp_pipe.gotoAndPlay("object");
   this.stage.update();
