@@ -38,8 +38,9 @@ class WarpPipe extends MarioObject {
     this.warp_pipe.x = 450;
     this.warp_pipe.width = 32;
     this.warp_pipe.height = 45;
-    this.intervalTreeX.insertInterval(this.warp_pipe.x, this.warp_pipe.x + this.warp_pipe.width, "warp_pipe", this.id)
+    this.intervalTreeX.insertInterval(this.warp_pipe.x, this.warp_pipe.x + this.warp_pipe.width, "warp_pipe", this.id);
     this.intervalTreeY.insertInterval(this.warp_pipe.y, this.warp_pipe.y + this.warp_pipe.height, "warp_pipe", this.id);
+    this.active = true;
     this.stage.addChild(this.warp_pipe);
     this.warp_pipe.gotoAndPlay("object");
     this.stage.setChildIndex(this.warp_pipe, 1);
@@ -47,10 +48,15 @@ class WarpPipe extends MarioObject {
   }
 
   handleMovingThroughLevel(horVel) {
-    this.intervalTreeX.removeInterval(this.warp_pipe.x, this.warp_pipe.x + this.warp_pipe.width, "warp_pipe", this.id);
-    this.warp_pipe.x -= horVel;
-    this.intervalTreeX.insertInterval(this.warp_pipe.x , this.warp_pipe.x + this.warp_pipe.width, "warp_pipe", this.id);
-    this.stage.update();
+    if (this.active) {
+      this.intervalTreeX.removeInterval(this.warp_pipe.x, this.warp_pipe.x + this.warp_pipe.width , "warp_pipe", this.id);
+      this.warp_pipe.x -= horVel;
+      this.intervalTreeX.insertInterval(this.warp_pipe.x , this.warp_pipe.x + this.warp_pipe.width, "warp_pipe", this.id);
+      this.stage.update();
+    }
+      if (this.warp_pipe.x < -100) {
+        this.active = false;
+      }
   }
 }
 export default WarpPipe;

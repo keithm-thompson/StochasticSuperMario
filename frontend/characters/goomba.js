@@ -77,12 +77,12 @@ class Goomba extends Character{
   handleMovingThroughLevel(horVel) {
     if (this.active) {
       this.horVel = horVel;
+      this.detectObjectCollision();
       this.intervalTreeX.removeInterval(this.goomba.x, this.goomba.x + this.goomba.width, "goomba", this.id);
       this.intervalTreeY.removeInterval(this.goomba.y, this.goomba.y + this.goomba.height, "goomba", this.id);
-      this.goomba.x += this.goomba.direction * horVel - this.goomba.direction;
+      this.goomba.x += this.goomba.direction * horVel + this.goomba.direction;
       this.intervalTreeX.insertInterval(this.goomba.x, this.goomba.x + this.goomba.width, "goomba", this.id);
       this.intervalTreeY.insertInterval(this.goomba.y, this.goomba.y + this.goomba.height, "goomba", this.id);
-      this.detectObjectCollision();
       this.stage.update();
       this.isMarioMoving = true;
     }

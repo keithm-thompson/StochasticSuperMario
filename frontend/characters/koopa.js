@@ -91,14 +91,14 @@ class Koopa extends Character{
   handleMovingThroughLevel(horVel) {
     if (this.active) {
       this.horVel = horVel;
+      this.detectObjectCollision();
       this.intervalTreeX.removeInterval(this.koopa.x, this.koopa.x + this.koopa.width, "koopa", this.id)
       this.intervalTreeY.removeInterval(this.koopa.y, this.koopa.y + this.koopa.height, "koopa", this.id);
-      this.koopa.x -= this.koopa.scaleX * (horVel - this.koopa.scaleX);
+      this.koopa.x -= this.koopa.scaleX * (horVel + this.koopa.scaleX);
       this.intervalTreeX.insertInterval(this.koopa.x, this.koopa.x + this.koopa.width, "koopa", this.id)
       this.intervalTreeY.insertInterval(this.koopa.y, this.koopa.y + this.koopa.height, "koopa", this.id);
       this.isMarioMoving = true
       this.stage.update();
-      this.detectObjectCollision();
     }
   }
 

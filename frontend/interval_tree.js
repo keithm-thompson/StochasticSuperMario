@@ -1,3 +1,5 @@
+import merge from 'lodash/merge';
+
 class IntervalTree {
   constructor(min, max, character, id){
     this.min = min;
@@ -62,10 +64,6 @@ class IntervalTree {
                 this.higherTree = new IntervalTree(min, max, character, id);
             }
         } else {
-          if (min < this.min && max > this.max) {
-            this.min = min;
-            this.max = max;
-          }
           this.overlappingIntervals[id] = [min, max, character];
         }
     }
@@ -73,13 +71,13 @@ class IntervalTree {
 
   removeInterval(min, max, character, id){
     if (max < this.min) {
-      if (this.lowerTree) {
+      if (this.lowerTree && this.lowerTree.min) {
         this.lowerTree.removeInterval(min, max, character, id);
       } else {
         return null;
       }
     } else if ( min > this.max) {
-      if (this.higherTree) {
+      if (this.higherTree && this.higherTree.min) {
         this.higherTree.removeInterval(min, max, character, id);
       } else {
         return null;
@@ -87,19 +85,23 @@ class IntervalTree {
     } else {
        delete this.overlappingIntervals[id];
        if (Object.keys(this.overlappingIntervals).length === 0) {
-          if (this.lowerTree.min && this.higherTree.min) {
-            let newTreeInfo = this.removeTwoChildrenNode(this.higherTree);
+          if (this.lowerTree && this.lowerTree.min && this.higherTree && this.higherTree.min) {
+            let replacementNode = this.removeTwoChildrenNode(this.higherTree, this);
+            this.min = replacementNode.min;
+            this.max = replacementNode.max;
+            this.overlappingIntervals = replacementNode.overlappingIntervals;
 
-          } else if (this.lowerTree.min) {
+          } else if (this.lowerTree && this.lowerTree.min) {
             this.min = this.lowerTree.min;
             this.max = this.lowerTree.max;
             this.center = this.lowerTree.center;
 
             this.overlappingIntervals = this.lowerTree.overlappingIntervals;
+            let tempHigherTree = this.lowerTree.higherTree;
             this.lowerTree = this.lowerTree.lowerTree;
-            this.lowerTree = this.lowerTree.higherTree;
+            this.higherTree = tempHigherTree;
 
-          } else if (this.higherTree.min) {
+          } else if (this.higherTree && this.higherTree.min) {
              this.min = this.higherTree.min;
              this.max = this.higherTree.max;
              this.center = this.higherTree.center;
@@ -120,17 +122,26 @@ class IntervalTree {
      }
   }
 
-  removeTwoChildrenNode(higherTree) {
-    if (higherTree.lowerTree.min && higherTree.higherTree) {
-      return this.removeTwoChildrenNode(higherTree);
-    } else if (node.higherTree.lowerTree.min) {
-      let newTreeInfo = [node.higherTree.lowerTree.min, node.higherTree.lowerTree.max]
-      return
+  removeTwoChildrenNode(node, currentMostMinParent) {
+    if (node.lowerTree && node.lowerTree.min && node.higherTree && node.higherTree.min) {
+      return this.removeTwoChildrenNode(node.lowerTree, node);
+    } else if (node.lowerTree && node.lowerTree.min) {
+      return this.removeTwoChildrenNode(node.lowerTree, node);
+    } else if (node.higherTree && node.higherTree.min){
+      if(currentMostMinParent) {
+        currentMostMinParent.lowerTree = node.higherTree;
+      }
+      return node;
+    } else {
+      if(currentMostMinParent) {
+        currentMostMinParent.lowerTree = null;
+      }
+      return node;
     }
   }
 }
 
-export const characterIntervalTreeX = new IntervalTree(350,350,"canvas", 0);
-export const characterIntervalTreeY = new IntervalTree(200,200,"canvas", 0);
-export const objectIntervalTreeX = new IntervalTree(350, 350, "canvas", 0);
-export const objectIntervalTreeY = new IntervalTree(200, 200, "canvas", 0);
+export const characterIntervalTreeX = new IntervalTree(-1000, -1000,"canvas", 0);
+export const characterIntervalTreeY = new IntervalTree(1200,1200,"canvas", 0);
+export const objectIntervalTreeX = new IntervalTree(-1000, -1000, "canvas", 0);
+export const objectIntervalTreeY = new IntervalTree(1200, 1200, "canvas", 0);

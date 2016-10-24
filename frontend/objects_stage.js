@@ -5,11 +5,11 @@ class ObjectsStage {
   constructor(stage){
     this.stage = stage;
     this.objects = {};
+    this.objects[1] = new WarpPipe(stage, 1);
     this.objects[2] = new Block(stage, 2,  200, 270);
     this.objects[3] = new Block(stage, 3, 217, 270);
     this.objects[5] = new Block(stage, 5, 234, 270);
     this.objects[6] = new Block(stage, 6, 251, 270);
-    this.objects[1] = new WarpPipe(stage, 1);
   }
 
   addChild(child) {

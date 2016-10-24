@@ -9,10 +9,10 @@ class CharactersStage {
   constructor(stage, objectsStage) {
     this.stage = stage;
     this.characters = {};
-    // this.characters[1] = new Goomba(stage, objectsStage, 1);
-    // this.characters[2] = new Koopa(stage, objectsStage, 2);
-    // this.characters[3] = new Bullet(stage, objectsStage, 3);
-    // this.characters[4] = new PiranhaPlant(objectsStage, objectsStage, 4);
+    this.characters[1] = new Goomba(stage, objectsStage, 1);
+    this.characters[2] = new Koopa(stage, objectsStage, 2);
+    this.characters[3] = new Bullet(stage, objectsStage, 3);
+    this.characters[4] = new PiranhaPlant(objectsStage, objectsStage, 4);
     this.mario = new Mario(stage, objectsStage, this);
     this.handleCharacterCollision = this.handleCharacterCollision.bind(this);
   }
