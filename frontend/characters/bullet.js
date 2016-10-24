@@ -1,11 +1,11 @@
 import Character from './character';
 
 class Bullet extends Character {
-  constructor(stage, objectsStage, id){
+  constructor(stage, objectsStage, id, x, y){
     super(objectsStage);
     this.stage = stage;
     this.id = id;
-    this.pos = [50,370];
+    this.pos = [x, y];
     this.horVel = 0;
     this.verVel = 0;
     this.imageLoaded  = this.imageLoaded.bind(this);
@@ -39,7 +39,6 @@ class Bullet extends Character {
         this.intervalTreeX.insertInterval(this.bullet.x - this.bullet.width, this.bullet.x, "bullet", this.id);
         this.intervalTreeY.insertInterval(this.bullet.y, this.bullet.y + this.bullet.height, "bullet", this.id);
       }
-      this.stage.update();
     } else {
       this.isMarioMoving = false;
     }
@@ -61,7 +60,7 @@ class Bullet extends Character {
     let spriteSheet = new createjs.SpriteSheet(spriteData);
     this.bullet =  new createjs.Sprite(spriteSheet);
     this.bullet.y = this.pos[1] - 100;
-    this.bullet.x = -25;
+    this.bullet.x = this.pos[0];
     this.bullet.width = 23;
     this.bullet.height = 20;
     this.bullet.scaleX = -1;
@@ -70,7 +69,6 @@ class Bullet extends Character {
 
     this.stage.addChild(this.bullet);
     this.bullet.gotoAndPlay("stand");
-    this.stage.update();
   }
 
   handleMovingThroughLevel(horVel) {
@@ -81,7 +79,6 @@ class Bullet extends Character {
       this.intervalTreeX.insertInterval(this.bullet.x, this.bullet.x + this.bullet.width, "bullet", this.id)
       this.intervalTreeY.insertInterval(this.bullet.y, this.bullet.y + this.bullet.height, "bullet", this.id);
       this.isMarioMoving = true;
-      this.stage.update();
     }
   }
 

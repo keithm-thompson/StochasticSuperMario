@@ -111,12 +111,10 @@ class Mario extends Character {
                 this.objectsStage.handleObjectCollision(id, objectCollisionY[id][2]);
               }
             } else if (this.mario.x <= objectCollisionX[id][1]) {
-              console.log(objectCollisionX[id][1]);
               objectConst = 0;
               this.horVel = 2;
               this.mario.x -= 4;
             } else if (this.mario.x >= objectCollisionX[id][0]){
-              console.log(objectCollisionX[id][0]);
               objectConst = 0;
               this.horVel = 2;
               this.mario.x += 4;
@@ -127,6 +125,7 @@ class Mario extends Character {
       if(characterCollisionX && characterCollisionY) {
         Object.keys(characterCollisionX).forEach((id) => {
           if (characterCollisionY[id]) {
+            console.log(characterCollisionY[id][2]);
             if (this.mario.y + this.mario.height <= characterCollisionY[id][0] + 3) {
               this.charactersStage.handleCharacterCollision(id, characterCollisionY[id][2]);
               this.mario.y -= 20;
@@ -140,6 +139,9 @@ class Mario extends Character {
       if (this.horVel !== 0 && this.mario.scaleX === 1 && this.mario.x > 400) {
           this.charactersStage.handleMovingThroughLevel(this.horVel);
           this.objectsStage.handleMovingThroughLevel(this.horVel);
+          if(Math.random() < .015) {
+            this.objectsStage.addObjects();
+          }
       }
 
       if (this.verVel === 0 && this.mario.currentAnimation === "jump") {
@@ -156,10 +158,11 @@ class Mario extends Character {
 
 
       this.mario.y - this.verVel > 331 ? this.mario.y = 332 : this.mario.y -= this.verVel;
-      if (this.mario.x < 400 || this.mario.scaleX === -1) {
+      if (((this.mario.x < 400) || this.mario.scaleX === -1) && (this.mario.x > 24 || this.mario.scaleX === 1)) {
         this.mario.x += this.mario.scaleX * this.horVel * objectConst;
       }
       this.stage.update();
+      this.objectsStage.stage.update();
     }
   }
 
@@ -239,7 +242,7 @@ class Mario extends Character {
           this.mario.scaleX = -1;
           this.mario.x += this.mario.width;
           this.horVel = 3;
-        } else if (this.horVel < 9){
+        } else if (this.horVel < 6){
         this.horVel += Mario.HORVEL;
         }
       } else if (this.keys[key] === "jump" && this.numJumps < 2) {

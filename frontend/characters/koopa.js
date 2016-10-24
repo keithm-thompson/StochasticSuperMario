@@ -1,11 +1,11 @@
 import Character from './character';
 
 class Koopa extends Character{
-  constructor(stage, objectsStage, id){
+  constructor(stage, objectsStage, id, x, y){
     super(objectsStage);
     this.stage = stage;
     this.id = id;
-    this.pos = [50,370];
+    this.pos = [x, y];
     this.horVel = 0;
     this.verVel = 0;
     this.imageLoaded  = this.imageLoaded.bind(this);
@@ -39,7 +39,6 @@ class Koopa extends Character{
         this.intervalTreeX.insertInterval(this.koopa.x - this.koopa.width, this.koopa.x, "koopa", this.id);
         this.intervalTreeY.insertInterval(this.koopa.y + 5, this.koopa.y + this.koopa.height, "koopa", this.id);
       }
-        this.stage.update();
         this.detectObjectCollision();
       } else {
         this.isMarioMoving = false;
@@ -94,12 +93,15 @@ class Koopa extends Character{
       this.detectObjectCollision();
       this.intervalTreeX.removeInterval(this.koopa.x, this.koopa.x + this.koopa.width, "koopa", this.id)
       this.intervalTreeY.removeInterval(this.koopa.y, this.koopa.y + this.koopa.height, "koopa", this.id);
-      this.koopa.x -= this.koopa.scaleX * (horVel + this.koopa.scaleX);
+      if (this.koopa.scaleX == 1) {
+        this.koopa.x -= this.koopa.scaleX * horVel - 1;
+      } else {
+        this.koopa.x += this.koopa.scaleX * horVel + 1;
+      }
       this.intervalTreeX.insertInterval(this.koopa.x, this.koopa.x + this.koopa.width, "koopa", this.id)
       this.intervalTreeY.insertInterval(this.koopa.y, this.koopa.y + this.koopa.height, "koopa", this.id);
       this.isMarioMoving = true
-      this.stage.update();
-    }
+    } 
   }
 
   imageLoaded() {
@@ -120,7 +122,7 @@ class Koopa extends Character{
     let spriteSheet = new createjs.SpriteSheet(spriteData);
     this.koopa =  new createjs.Sprite(spriteSheet);
     this.koopa.y = this.pos[1] - 34;
-    this.koopa.x = 150;
+    this.koopa.x = this.pos[0];
     this.koopa.width = 22;
     this.koopa.height = 34;
     this.koopa.scaleX = -1;
@@ -128,7 +130,7 @@ class Koopa extends Character{
     this.stage.addChild(this.koopa);
     this.active = true;
     this.koopa.gotoAndPlay("move");
-    this.stage.update();
+     ;
   }
 
 }

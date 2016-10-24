@@ -1,11 +1,11 @@
 import Character from './character';
 
 class Goomba extends Character{
-  constructor(stage, objectsStage, id){
+  constructor(stage, objectsStage, id, x, y){
     super(objectsStage);
     this.stage = stage;
     this.id = id;
-    this.pos = [50,370];
+    this.pos = [x, y];
     this.horVel = 0;
     this.verVel = 0;
     this.imageLoaded  = this.imageLoaded.bind(this);
@@ -32,7 +32,6 @@ class Goomba extends Character{
       this.goomba.x += this.goomba.direction * 1;
       this.intervalTreeX.insertInterval(this.goomba.x, this.goomba.x + this.goomba.width, "goomba", this.id);
       this.intervalTreeY.insertInterval(this.goomba.y, this.goomba.y + this.goomba.height, "goomba", this.id);
-      this.stage.update();
       this.detectObjectCollision();
     } else {
       this.isMarioMoving = false;
@@ -80,10 +79,9 @@ class Goomba extends Character{
       this.detectObjectCollision();
       this.intervalTreeX.removeInterval(this.goomba.x, this.goomba.x + this.goomba.width, "goomba", this.id);
       this.intervalTreeY.removeInterval(this.goomba.y, this.goomba.y + this.goomba.height, "goomba", this.id);
-      this.goomba.x += this.goomba.direction * horVel + this.goomba.direction;
+      this.goomba.x -= this.goomba.direction * horVel + -1 * this.goomba.direction ;
       this.intervalTreeX.insertInterval(this.goomba.x, this.goomba.x + this.goomba.width, "goomba", this.id);
       this.intervalTreeY.insertInterval(this.goomba.y, this.goomba.y + this.goomba.height, "goomba", this.id);
-      this.stage.update();
       this.isMarioMoving = true;
     }
   }
@@ -107,7 +105,7 @@ class Goomba extends Character{
     let spriteSheet = new createjs.SpriteSheet(spriteData);
     this.goomba =  new createjs.Sprite(spriteSheet);
     this.goomba.y = this.pos[1] - 31;
-    this.goomba.x = 100;
+    this.goomba.x = this.pos[0];
     this.goomba.width = 22;
     this.goomba.height = 31;
     this.goomba.direction = 1;
@@ -115,7 +113,6 @@ class Goomba extends Character{
     this.stage.addChild(this.goomba);
     this.active = true;
     this.goomba.gotoAndPlay("move");
-    this.stage.update();
   }
 
 }

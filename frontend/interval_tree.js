@@ -1,7 +1,7 @@
 import merge from 'lodash/merge';
 
 class IntervalTree {
-  constructor(min, max, character, id){
+  constructor(min, max, character, id, parent){
     this.min = min;
     this.max = max;
     this.center = (max + min) / 2;
@@ -9,6 +9,7 @@ class IntervalTree {
     this.higherTree = null;
     this.overlappingIntervals = {};
     this.overlappingIntervals[id] = [min, max, character];
+    this.parent = parent;
   }
 
   query(min, max){
@@ -35,38 +36,37 @@ class IntervalTree {
           return null;
         }
       }
-
       return this.overlappingIntervals;
     }
   }
 
   insertInterval(min, max, character, id){
-    if(!this.min && !this.max) {
-      this.min = min;
-      this.max = max;
-      this.center = (min + max) / 2;
-
-      this.lowerTree = null;
-      this.higherTree = null;
-      this.overlappingIntervals = {};
-      this.overlappingIntervals[id] = [min, max, character];
-    } else {
+    // if(!this.min && !this.max) {
+    //   this.min = min;
+    //   this.max = max;
+    //   this.center = (min + max) / 2;
+    //
+    //   this.lowerTree = null;
+    //   this.higherTree = null;
+    //   this.overlappingIntervals = {};
+    //   this.overlappingIntervals[id] = [min, max, character];
+    // } else {
         if (max < this.min) {
             if (this.lowerTree) {
                 this.lowerTree.insertInterval(min, max, character, id);
             } else {
-                this.lowerTree = new IntervalTree(min, max, character, id);
+                this.lowerTree = new IntervalTree(min, max, character, id, this);
             }
         } else if (min > this.max) {
             if (this.higherTree) {
                 this.higherTree.insertInterval(min, max, character, id);
             } else {
-                this.higherTree = new IntervalTree(min, max, character, id);
+                this.higherTree = new IntervalTree(min, max, character, id, this);
             }
         } else {
           this.overlappingIntervals[id] = [min, max, character];
         }
-    }
+    // }
   }
 
   removeInterval(min, max, character, id){
@@ -97,6 +97,7 @@ class IntervalTree {
             this.center = this.lowerTree.center;
 
             this.overlappingIntervals = this.lowerTree.overlappingIntervals;
+            this.lowerTree.parent = this.parent;
             let tempHigherTree = this.lowerTree.higherTree;
             this.lowerTree = this.lowerTree.lowerTree;
             this.higherTree = tempHigherTree;
@@ -107,16 +108,15 @@ class IntervalTree {
              this.center = this.higherTree.center;
 
              this.overlappingIntervals = this.higherTree.overlappingIntervals;
+             this.higherTree.parent = this.parent;
              this.lowerTree = this.higherTree.lowerTree;
              this.higherTree = this.higherTree.higherTree;
          } else {
-            this.min = null;
-            this.max = null;
-            this.center = null;
-
-            this.overlappingIntervals = null;
-            this.lowerTree = null;
-            this.higherTree = null;
+           if (this.parent.lowerTree == this) {
+             this.parent.lowerTree = null;
+           } else {
+             this.parent.higherTree = null;
+           }
          }
        }
      }

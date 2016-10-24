@@ -1,13 +1,23 @@
 import MarioObject from './object';
 
 class WarpPipe extends MarioObject {
-  constructor(stage, id) {
+  constructor(stage, id, x ,y, objectsStage) {
     super();
     this.stage = stage;
+    this.objectsStage = objectsStage;
     this.id = id;
-    this.pos = [50,370];
+    this.pos = [x, y];
     this.imageLoaded  = this.imageLoaded.bind(this);
     this.loadImage();
+    this.handleTick = this.handleTick.bind(this);
+    createjs.Ticker.addEventListener("tick", this.handleTick);
+  }
+
+  handleTick() {
+    if(this.active) {
+      this.intervalTreeX.removeInterval(this.warp_pipe.x, this.warp_pipe.x + this.warp_pipe.width , "warp_pipe", this.id);
+      this.intervalTreeX.insertInterval(this.warp_pipe.x , this.warp_pipe.x + this.warp_pipe.width, "warp_pipe", this.id);
+    }
   }
 
 
@@ -35,7 +45,7 @@ class WarpPipe extends MarioObject {
     let spriteSheet = new createjs.SpriteSheet(spriteData);
     this.warp_pipe =  new createjs.Sprite(spriteSheet);
     this.warp_pipe.y = this.pos[1] - 45;
-    this.warp_pipe.x = 450;
+    this.warp_pipe.x = this.pos[0];
     this.warp_pipe.width = 32;
     this.warp_pipe.height = 45;
     this.intervalTreeX.insertInterval(this.warp_pipe.x, this.warp_pipe.x + this.warp_pipe.width, "warp_pipe", this.id);
@@ -44,7 +54,7 @@ class WarpPipe extends MarioObject {
     this.stage.addChild(this.warp_pipe);
     this.warp_pipe.gotoAndPlay("object");
     this.stage.setChildIndex(this.warp_pipe, 1);
-    this.stage.update();
+     ;
   }
 
   handleMovingThroughLevel(horVel) {
@@ -52,10 +62,13 @@ class WarpPipe extends MarioObject {
       this.intervalTreeX.removeInterval(this.warp_pipe.x, this.warp_pipe.x + this.warp_pipe.width , "warp_pipe", this.id);
       this.warp_pipe.x -= horVel;
       this.intervalTreeX.insertInterval(this.warp_pipe.x , this.warp_pipe.x + this.warp_pipe.width, "warp_pipe", this.id);
-      this.stage.update();
     }
       if (this.warp_pipe.x < -100) {
         this.active = false;
+        this.objectsStage.deleteObjects(this.id);
+        this.intervalTreeX.removeInterval(this.warp_pipe.x, this.warp_pipe.x + this.warp_pipe.width , "warp_pipe", this.id);
+        this.intervalTreeY.removeInterval(this.warp_pipe.y, this.warp_pipe.y + this.warp_pipe.height, "warp_pipe", this.id);
+
       }
   }
 }

@@ -1,11 +1,11 @@
 import Character from './character';
 
 class PiranhaPlant extends Character {
-  constructor(stage, objectsStage, id){
+  constructor(stage, objectsStage, id, x, y){
     super(objectsStage);
     this.stage = stage.stage;
     this.id = id;
-    this.pos = [50,370];
+    this.pos = [x, y];
     this.horVel = 0;
     this.verVel = 0;
     this.imageLoaded  = this.imageLoaded.bind(this);
@@ -46,18 +46,19 @@ class PiranhaPlant extends Character {
         this.piranhaPlant.y += Number(this.direction) * 1;
       }
       this.intervalTreeY.insertInterval(this.piranhaPlant.y + 1, this.piranhaPlant.y + this.piranhaPlant.height, "piranhaPlant", this.id);
-      this.stage.update();
-      }
+    }
   }
 
   handleMovingThroughLevel(horVel) {
     if (this.active) {
       this.intervalTreeX.removeInterval(this.piranhaPlant.x + 3, this.piranhaPlant.x + this.piranhaPlant.width - 3, "piranhaPlant", this.id);
-      this.intervalTreeY.removeInterval(this.piranhaPlant.y, this.piranhaPlant.y + this.piranhaPlant.height, "piranhaPlant", this.id);
       this.piranhaPlant.x -= horVel;
       this.intervalTreeX.insertInterval(this.piranhaPlant.x + 3, this.piranhaPlant.x + this.piranhaPlant.width - 3, "piranhaPlant", this.id);
-      this.intervalTreeY.insertInterval(this.piranhaPlant.y, this.piranhaPlant.y + this.piranhaPlant.height, "piranhaPlant", this.id);
-      this.stage.update();
+    }
+    if (this.piranhaPlant.x < -100) {
+      this.active = false;
+      this.intervalTreeX.removeInterval(this.piranhaPlant.x + 3, this.piranhaPlant.x + this.piranhaPlant.width - 3, "piranhaPlant", this.id);
+      this.intervalTreeY.removeInterval(this.piranhaPlant.y, this.piranhaPlant.y + this.piranhaPlant.height, "piranhaPlant", this.id);
     }
   }
 
@@ -78,16 +79,14 @@ class PiranhaPlant extends Character {
     let spriteSheet = new createjs.SpriteSheet(spriteData);
     this.piranhaPlant =  new createjs.Sprite(spriteSheet);
     this.piranhaPlant.y = this.pos[1] - 90;
-    this.piranhaPlant.x = 466;
+    this.piranhaPlant.x = this.pos[0];
     this.piranhaPlant.width = 20;
     this.piranhaPlant.height = 46;
-    this.intervalTreeX.insertInterval(this.piranhaPlant.x + 3, this.piranhaPlant.x + this.piranhaPlant.width - 3, "piranhaPlant", this.id);
-    this.active = false;
+    this.active = true;
     createjs.Ticker.framerate = 25;
-    // this.stage.addChild(this.piranhaPlant);
+    this.stage.addChild(this.piranhaPlant);
     this.piranhaPlant.gotoAndPlay("move");
     this.stage.setChildIndex(this.piranhaPlant, 0);
-    this.stage.update();
   }
 
 }
