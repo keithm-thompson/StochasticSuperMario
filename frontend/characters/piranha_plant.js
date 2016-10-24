@@ -3,7 +3,7 @@ import Character from './character';
 class PiranhaPlant extends Character {
   constructor(stage, objectsStage, id){
     super(objectsStage);
-    this.stage = stage;
+    this.stage = stage.stage;
     this.id = id;
     this.pos = [50,370];
     this.horVel = 0;
@@ -12,7 +12,6 @@ class PiranhaPlant extends Character {
     this.handleTick = this.handleTick.bind(this);
     this.loadImage();
     createjs.Ticker.addEventListener("tick", this.handleTick);
-    this.shouldDecelerate = true;
   }
 
 
@@ -27,14 +26,38 @@ class PiranhaPlant extends Character {
 
   handleTick() {
     if(this.active) {
-      this.intervalTreeY.removeInterval(this.piranhaPlant.y + 2, this.piranhaPlant.y + this.piranhaPlant.height, "piranhaPlant", this.id);
+      this.intervalTreeY.removeInterval(this.piranhaPlant.y + 1, this.piranhaPlant.y + this.piranhaPlant.height, "piranhaPlant", this.id);
       if(this.piranhaPlant.y <= this.pos[1] - 90) {
-        this.direction = 1;
+        this.move = false;
+        this.piranhaPlant.y += 1;
+        window.setTimeout(() => {
+          this.direction = 1;
+          this.move = true;
+        }, 750);
       } else if (this.piranhaPlant.y >= this.pos[1] - 45) {
-        this.direction = -1;
+        this.move = false;
+        this.piranhaPlant.y -= 1;
+        window.setTimeout(() => {
+          this.direction = -1;
+          this.move = true;
+        }, 1000);
       }
-      this.piranhaPlant.y += this.direction * 1;
-      this.intervalTreeY.insertInterval(this.piranhaPlant.y + 2, this.piranhaPlant.y + this.piranhaPlant.height, "piranhaPlant", this.id);
+      if (this.move) {
+        this.piranhaPlant.y += Number(this.direction) * 1;
+      }
+      this.intervalTreeY.insertInterval(this.piranhaPlant.y + 1, this.piranhaPlant.y + this.piranhaPlant.height, "piranhaPlant", this.id);
+      this.stage.update();
+      }
+  }
+
+  handleMovingThroughLevel(horVel) {
+    if (this.active) {
+      this.intervalTreeX.removeInterval(this.piranhaPlant.x + 3, this.piranhaPlant.x + this.piranhaPlant.width - 3, "piranhaPlant", this.id);
+      this.intervalTreeY.removeInterval(this.piranhaPlant.y, this.piranhaPlant.y + this.piranhaPlant.height, "piranhaPlant", this.id);
+      this.piranhaPlant.x -= horVel;
+      this.intervalTreeX.insertInterval(this.piranhaPlant.x + 3, this.piranhaPlant.x + this.piranhaPlant.width - 3, "piranhaPlant", this.id);
+      this.intervalTreeY.insertInterval(this.piranhaPlant.y, this.piranhaPlant.y + this.piranhaPlant.height, "piranhaPlant", this.id);
+      this.stage.update();
     }
   }
 
@@ -58,11 +81,12 @@ class PiranhaPlant extends Character {
     this.piranhaPlant.x = 466;
     this.piranhaPlant.width = 20;
     this.piranhaPlant.height = 46;
-    this.active = true;
-    this.intervalTreeX.insertInterval(this.piranhaPlant.x + 3, this.piranhaPlant.x + this.piranhaPlant.width - 3, "piranhaPlant");
+    this.intervalTreeX.insertInterval(this.piranhaPlant.x + 3, this.piranhaPlant.x + this.piranhaPlant.width - 3, "piranhaPlant", this.id);
+    this.active = false;
     createjs.Ticker.framerate = 25;
-    this.stage.addChild(this.piranhaPlant);
+    // this.stage.addChild(this.piranhaPlant);
     this.piranhaPlant.gotoAndPlay("move");
+    this.stage.setChildIndex(this.piranhaPlant, 0);
     this.stage.update();
   }
 

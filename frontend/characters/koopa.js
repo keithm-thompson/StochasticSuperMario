@@ -25,7 +25,7 @@ class Koopa extends Character{
   }
 
   handleTick(){
-    if(this.active) {
+    if(this.active && !this.isMarioMoving) {
       if (this.koopa.scaleX === 1) {
         this.intervalTreeX.removeInterval(this.koopa.x, this.koopa.x + this.koopa.width, "koopa", this.id);
         this.intervalTreeY.removeInterval(this.koopa.y + 5, this.koopa.y + this.koopa.height, "koopa", this.id);
@@ -41,6 +41,9 @@ class Koopa extends Character{
       }
         this.stage.update();
         this.detectObjectCollision();
+      } else {
+        this.isMarioMoving = false;
+        this.horVel = null;
       }
   }
 
@@ -75,8 +78,27 @@ class Koopa extends Character{
       Object.keys(objectCollisionX).forEach((object) => {
         if (objectCollisionY[object]) {
           this.koopa.scaleX = -1 * this.koopa.scaleX;
+          if (this.horVel) {
+            this.intervalTreeX.removeInterval(this.koopa.x, this.koopa.x + this.koopa.width, "koopa", this.id)
+            this.koopa.x += this.koopa.scaleX * (this.horVel + 15);
+            this.intervalTreeX.insertInterval(this.koopa.x, this.koopa.x + this.koopa.width, "koopa", this.id)
+          }
         }
       });
+    }
+  }
+
+  handleMovingThroughLevel(horVel) {
+    if (this.active) {
+      this.horVel = horVel;
+      this.intervalTreeX.removeInterval(this.koopa.x, this.koopa.x + this.koopa.width, "koopa", this.id)
+      this.intervalTreeY.removeInterval(this.koopa.y, this.koopa.y + this.koopa.height, "koopa", this.id);
+      this.koopa.x -= this.koopa.scaleX * (horVel - this.koopa.scaleX);
+      this.intervalTreeX.insertInterval(this.koopa.x, this.koopa.x + this.koopa.width, "koopa", this.id)
+      this.intervalTreeY.insertInterval(this.koopa.y, this.koopa.y + this.koopa.height, "koopa", this.id);
+      this.isMarioMoving = true
+      this.stage.update();
+      this.detectObjectCollision();
     }
   }
 

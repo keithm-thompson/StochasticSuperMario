@@ -48,4 +48,20 @@ export default class Block extends MarioObject {
     this.block.gotoAndPlay("objectLight");
     this.stage.update();
   }
+
+  handleMovingThroughLevel(horVel) {
+    this.intervalTreeX.removeInterval(this.block.x, this.block.x + this.block.width, "block", this.id)
+    this.block.x -= horVel;
+    this.intervalTreeX.insertInterval(this.block.x, this.block.x + this.block.width, "block", this.id)
+    this.stage.update();
+  }
+
+  handleObjectCollision() {
+    this.block.y -= 5;
+    this.stage.update();
+    window.setTimeout(() => {
+      this.block.y += 5;
+      this.stage.update();
+    }, 250);
+  }
 }

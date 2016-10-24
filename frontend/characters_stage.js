@@ -8,21 +8,27 @@ import ObjectsStage from './objects_stage';
 class CharactersStage {
   constructor(stage, objectsStage) {
     this.stage = stage;
-    this.goomba = new Goomba(stage, objectsStage, 1);
-    this.koopa = new Koopa(stage, objectsStage, 2);
-    this.bullet = new Bullet(stage, objectsStage, 3);
-    this.piranhaPlant = new PiranhaPlant(stage, objectsStage, 4);
+    this.characters = {};
+    // this.characters[1] = new Goomba(stage, objectsStage, 1);
+    // this.characters[2] = new Koopa(stage, objectsStage, 2);
+    // this.characters[3] = new Bullet(stage, objectsStage, 3);
+    // this.characters[4] = new PiranhaPlant(objectsStage, objectsStage, 4);
     this.mario = new Mario(stage, objectsStage, this);
     this.handleCharacterCollision = this.handleCharacterCollision.bind(this);
   }
+  handleMovingThroughLevel(horVel) {
+    Object.keys(this.characters).forEach((character) => {
+      this.characters[character].handleMovingThroughLevel(horVel);
+    });
+  }
 
-  handleCharacterCollision(character){
+  handleCharacterCollision(id, character){
     switch (character) {
       case "goomba":
-        this.goomba.handleCharacterCollision();
+        this.characters[id].handleCharacterCollision();
         break;
       case "koopa":
-        this.koopa.handleCharacterCollision();
+        this.characters[id].handleCharacterCollision();
         break;
       case "piranhaPlant":
         this.mario.handleCharacterCollision();

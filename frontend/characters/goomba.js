@@ -26,16 +26,19 @@ class Goomba extends Character{
   }
 
   handleTick(){
-    if(this.active) {
-        this.intervalTreeX.removeInterval(this.goomba.x, this.goomba.x + this.goomba.width, "goomba", this.id);
-        this.intervalTreeY.removeInterval(this.goomba.y, this.goomba.y + this.goomba.height, "goomba", this.id);
-        this.goomba.x += this.goomba.direction * 1;
-        this.intervalTreeX.insertInterval(this.goomba.x, this.goomba.x + this.goomba.width, "goomba", this.id);
-        this.intervalTreeY.insertInterval(this.goomba.y, this.goomba.y + this.goomba.height, "goomba", this.id);
-        this.stage.update();
-        this.detectObjectCollision();
-      }
+    if(this.active && !this.isMarioMoving) {
+      this.intervalTreeX.removeInterval(this.goomba.x, this.goomba.x + this.goomba.width, "goomba", this.id);
+      this.intervalTreeY.removeInterval(this.goomba.y, this.goomba.y + this.goomba.height, "goomba", this.id);
+      this.goomba.x += this.goomba.direction * 1;
+      this.intervalTreeX.insertInterval(this.goomba.x, this.goomba.x + this.goomba.width, "goomba", this.id);
+      this.intervalTreeY.insertInterval(this.goomba.y, this.goomba.y + this.goomba.height, "goomba", this.id);
+      this.stage.update();
+      this.detectObjectCollision();
+    } else {
+      this.isMarioMoving = false;
+      this.horVel = null;
     }
+  }
 
   handleCharacterCollision() {
     this.active = false;
@@ -61,8 +64,27 @@ class Goomba extends Character{
       Object.keys(objectCollisionX).forEach((object) => {
         if (objectCollisionY[object]) {
           this.goomba.direction = -1 * this.goomba.direction;
+          if (this.horVel) {
+            this.intervalTreeX.removeInterval(this.goomba.x, this.goomba.x + this.goomba.width, "goomba", this.id);
+            this.goomba.x += this.goomba.direction * (this.horVel + 15);
+            this.intervalTreeX.insertInterval(this.goomba.x, this.goomba.x + this.goomba.width, "goomba", this.id);
+          }
         }
       });
+    }
+  }
+
+  handleMovingThroughLevel(horVel) {
+    if (this.active) {
+      this.horVel = horVel;
+      this.intervalTreeX.removeInterval(this.goomba.x, this.goomba.x + this.goomba.width, "goomba", this.id);
+      this.intervalTreeY.removeInterval(this.goomba.y, this.goomba.y + this.goomba.height, "goomba", this.id);
+      this.goomba.x += this.goomba.direction * horVel - this.goomba.direction;
+      this.intervalTreeX.insertInterval(this.goomba.x, this.goomba.x + this.goomba.width, "goomba", this.id);
+      this.intervalTreeY.insertInterval(this.goomba.y, this.goomba.y + this.goomba.height, "goomba", this.id);
+      this.detectObjectCollision();
+      this.stage.update();
+      this.isMarioMoving = true;
     }
   }
 

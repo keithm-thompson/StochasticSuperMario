@@ -25,20 +25,24 @@ class Bullet extends Character {
   }
 
   handleTick(){
-    if (this.bullet.scaleX === 1) {
-      this.intervalTreeX.removeInterval(this.bullet.x, this.bullet.x + this.bullet.width, "bullet", this.id);
-      this.intervalTreeY.removeInterval(this.bullet.y, this.bullet.y + this.bullet.height, "bullet", this.id);
-      this.bullet.x -= 4;
-      this.intervalTreeX.insertInterval(this.bullet.x, this.bullet.x + this.bullet.width, "bullet", this.id);
-      this.intervalTreeY.insertInterval(this.bullet.y, this.bullet.y + this.bullet.height, "bullet", this.id);
+    if (!this.isMarioMoving) {
+      if (this.bullet.scaleX === 1) {
+        this.intervalTreeX.removeInterval(this.bullet.x, this.bullet.x + this.bullet.width, "bullet", this.id);
+        this.intervalTreeY.removeInterval(this.bullet.y, this.bullet.y + this.bullet.height, "bullet", this.id);
+        this.bullet.x -= 4;
+        this.intervalTreeX.insertInterval(this.bullet.x, this.bullet.x + this.bullet.width, "bullet", this.id);
+        this.intervalTreeY.insertInterval(this.bullet.y, this.bullet.y + this.bullet.height, "bullet", this.id);
+      } else {
+        this.intervalTreeX.removeInterval(this.bullet.x - this.bullet.width, this.bullet.x, "bullet", this.id);
+        this.intervalTreeY.removeInterval(this.bullet.y, this.bullet.y + this.bullet.height, "bullet", this.id);
+        this.bullet.x += 4;
+        this.intervalTreeX.insertInterval(this.bullet.x - this.bullet.width, this.bullet.x, "bullet", this.id);
+        this.intervalTreeY.insertInterval(this.bullet.y, this.bullet.y + this.bullet.height, "bullet", this.id);
+      }
+      this.stage.update();
     } else {
-      this.intervalTreeX.removeInterval(this.bullet.x - this.bullet.width, this.bullet.x, "bullet", this.id);
-      this.intervalTreeY.removeInterval(this.bullet.y, this.bullet.y + this.bullet.height, "bullet", this.id);
-      this.bullet.x += 4;
-      this.intervalTreeX.insertInterval(this.bullet.x - this.bullet.width, this.bullet.x, "bullet", this.id);
-      this.intervalTreeY.insertInterval(this.bullet.y, this.bullet.y + this.bullet.height, "bullet", this.id);
+      this.isMarioMoving = false;
     }
-    this.stage.update();
   }
 
   imageLoaded() {
@@ -61,11 +65,24 @@ class Bullet extends Character {
     this.bullet.width = 23;
     this.bullet.height = 20;
     this.bullet.scaleX = -1;
+    this.active = true;
     createjs.Ticker.framerate = 25;
 
     this.stage.addChild(this.bullet);
     this.bullet.gotoAndPlay("stand");
     this.stage.update();
+  }
+
+  handleMovingThroughLevel(horVel) {
+    if (this.active) {
+      this.intervalTreeX.removeInterval(this.bullet.x, this.bullet.x + this.bullet.width, "bullet", this.id)
+      this.intervalTreeY.removeInterval(this.bullet.y, this.bullet.y + this.bullet.height, "bullet", this.id);
+      this.bullet.x -= horVel - 4;
+      this.intervalTreeX.insertInterval(this.bullet.x, this.bullet.x + this.bullet.width, "bullet", this.id)
+      this.intervalTreeY.insertInterval(this.bullet.y, this.bullet.y + this.bullet.height, "bullet", this.id);
+      this.isMarioMoving = true;
+      this.stage.update();
+    }
   }
 
 }
