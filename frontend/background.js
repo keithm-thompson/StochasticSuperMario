@@ -1,9 +1,12 @@
+import Cloud from './background/cloud';
+import Floor from './background/floor';
+
 class Background {
   constructor(ctx) {
     this.ctx = ctx;
     this.floor = this.renderFloorFromSprite();
-    this.cloud = this.renderCloudFromSprite();
-    this.grass = this.renderGrassFromSprite();
+    // this.cloud = this.renderCloudFromSprite();
+    // this.grass = this.renderGrassFromSprite();
   }
 
   renderFloorFromSprite() {
@@ -54,9 +57,9 @@ class Background {
 
     return grass;
   }
-
+//
   renderFloor(){
-    for (let i = 0; i < Background.WIDTH; i+= 32) {
+    for (let i = 0; i < Background.WIDTH; i+= 31) {
       this.ctx.drawImage(
         this.floor.image,
         0,

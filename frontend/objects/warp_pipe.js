@@ -54,7 +54,6 @@ class WarpPipe extends MarioObject {
     this.stage.addChild(this.warp_pipe);
     this.warp_pipe.gotoAndPlay("object");
     this.stage.setChildIndex(this.warp_pipe, 1);
-     ;
   }
 
   handleMovingThroughLevel(horVel) {

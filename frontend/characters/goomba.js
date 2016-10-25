@@ -1,18 +1,20 @@
 import Character from './character';
 
 class Goomba extends Character{
-  constructor(stage, objectsStage, id, x, y){
+  constructor(stage, objectsStage, id, x, y, scaleX){
     super(objectsStage);
     this.stage = stage;
     this.id = id;
     this.pos = [x, y];
     this.horVel = 0;
     this.verVel = 0;
+    this.scaleX = scaleX;
     this.imageLoaded  = this.imageLoaded.bind(this);
     this.handleTick = this.handleTick.bind(this);
     this.loadImage();
     createjs.Ticker.addEventListener("tick", this.handleTick);
     this.shouldDecelerate = true;
+    this.tick = Date.now();
   }
 
 
@@ -26,16 +28,19 @@ class Goomba extends Character{
   }
 
   handleTick(){
-    if(this.active && !this.isMarioMoving) {
-      this.intervalTreeX.removeInterval(this.goomba.x, this.goomba.x + this.goomba.width, "goomba", this.id);
-      this.intervalTreeY.removeInterval(this.goomba.y, this.goomba.y + this.goomba.height, "goomba", this.id);
-      this.goomba.x += this.goomba.direction * 1;
-      this.intervalTreeX.insertInterval(this.goomba.x, this.goomba.x + this.goomba.width, "goomba", this.id);
-      this.intervalTreeY.insertInterval(this.goomba.y, this.goomba.y + this.goomba.height, "goomba", this.id);
-      this.detectObjectCollision();
-    } else {
-      this.isMarioMoving = false;
-      this.horVel = null;
+    if( Date.now() - this.tick > window.tickDelay ) {
+      if(this.active && !this.isMarioMoving) {
+        this.intervalTreeX.removeInterval(this.goomba.x, this.goomba.x + this.goomba.width, "goomba", this.id);
+        this.intervalTreeY.removeInterval(this.goomba.y, this.goomba.y + this.goomba.height, "goomba", this.id);
+        this.goomba.x += this.goomba.direction * 1;
+        this.intervalTreeX.insertInterval(this.goomba.x, this.goomba.x + this.goomba.width, "goomba", this.id);
+        this.intervalTreeY.insertInterval(this.goomba.y, this.goomba.y + this.goomba.height, "goomba", this.id);
+        this.detectObjectCollision();
+      } else {
+        this.isMarioMoving = false;
+        this.horVel = null;
+      }
+      this.tick = Date.now();
     }
   }
 
@@ -79,7 +84,7 @@ class Goomba extends Character{
       this.detectObjectCollision();
       this.intervalTreeX.removeInterval(this.goomba.x, this.goomba.x + this.goomba.width, "goomba", this.id);
       this.intervalTreeY.removeInterval(this.goomba.y, this.goomba.y + this.goomba.height, "goomba", this.id);
-      this.goomba.x -= this.goomba.direction * horVel + -1 * this.goomba.direction ;
+      this.goomba.x -= this.goomba.direction * horVel - this.goomba.direction ;
       this.intervalTreeX.insertInterval(this.goomba.x, this.goomba.x + this.goomba.width, "goomba", this.id);
       this.intervalTreeY.insertInterval(this.goomba.y, this.goomba.y + this.goomba.height, "goomba", this.id);
       this.isMarioMoving = true;
@@ -108,7 +113,7 @@ class Goomba extends Character{
     this.goomba.x = this.pos[0];
     this.goomba.width = 22;
     this.goomba.height = 31;
-    this.goomba.direction = 1;
+    this.goomba.direction = this.scaleX;
     createjs.Ticker.framerate = 25;
     this.stage.addChild(this.goomba);
     this.active = true;

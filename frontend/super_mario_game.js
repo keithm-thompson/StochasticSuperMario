@@ -19,6 +19,7 @@ document.addEventListener("DOMContentLoaded", function(){
   const charactersCtx = charactersCanvas.getContext("2d");
   const objectsCtx = objectsCanvas.getContext("2d");
 
+  // let backgroundStage = new createjs.Stage("background-canvas");
 
   let objectsStage = new createjs.Stage("objects-canvas");
   objectsStage = new ObjectsStage(objectsStage);
@@ -26,6 +27,7 @@ document.addEventListener("DOMContentLoaded", function(){
   let charactersStage = new createjs.Stage("characters-canvas");
   charactersStage = new CharactersStage(charactersStage, objectsStage);
 
-  const background = new Background(backgroundCtx);
+  let background = new Background(backgroundCtx);
 
+  window.tickDelay = 2;
 });

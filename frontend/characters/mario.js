@@ -1,4 +1,5 @@
 import Character from './character';
+// import BackgroundStage from '../background_stage';
 
 class Mario extends Character {
   constructor(stage, objectsStage, charactersStage){
@@ -19,6 +20,8 @@ class Mario extends Character {
     createjs.Ticker.addEventListener("tick", this.handleTick);
     this.shouldDecelerate = true;
     this.numJumps = 0;
+    this.now = Date.now();
+    this.tick = Date.now();
   }
 
   setKeys(){
@@ -61,108 +64,127 @@ class Mario extends Character {
   }
 
   handleTick(){
-    if(this.active) {
-      if (this.shouldDecelerate && this.horVel > 0) {
-        this.horVel -= 3;
-      } else if (this.horVel < 0) {
-        this.horVel = 0;
-      }
-      if (this.shouldDecelerate && this.verVel > 0) {
-        this.verVel -= 1;
-      } else if (this.verVel < 0) {
-        this.verVel = 0;
-      }
-      if(this.mario.y < 331) {
-        this.verVel -= 3 ;
-      } else if (this.mario.y > 331) {
-        this.mario.y = 331;
-        this.verVel = 0;
-      }
+    if( Date.now() - this.tick > window.tickDelay) {
+      if(this.active) {
+        if (this.shouldDecelerate && this.horVel > 0) {
+          this.horVel -= 3;
+        } else if (this.horVel < 0) {
+          this.horVel = 0;
+        }
+        if (this.shouldDecelerate && this.verVel > 0) {
+          this.verVel -= 1;
+        } else if (this.verVel < 0) {
+          this.verVel = 0;
+        }
+        if(this.mario.y < 331) {
+          this.verVel -= 4;
+        } else if (this.mario.y > 331) {
+          this.mario.y = 331;
+          this.verVel = 0;
+        }
 
-      let objectConst = 1;
-      let objectCollisionX, objectCollisionY, characterCollisionX, characterCollisionY;
+        let objectConst = 1;
+        let objectCollisionX, objectCollisionY, characterCollisionX, characterCollisionY;
 
-      if (this.mario.scaleX === 1) {
-        objectCollisionX = this.objectIntervalTreeX.query(this.mario.x, this.mario.x + this.mario.width + this.horVel);
-        objectCollisionY = this.objectIntervalTreeY.query(this.mario.y, this.mario.y + this.mario.height );
+        if (this.mario.scaleX === 1) {
+          objectCollisionX = this.objectIntervalTreeX.query(this.mario.x, this.mario.x + this.mario.width + this.horVel);
+          objectCollisionY = this.objectIntervalTreeY.query(this.mario.y, this.mario.y + this.mario.height );
 
-        characterCollisionX = this.intervalTreeX.query(this.mario.x, this.mario.x + this.mario.width);
-        characterCollisionY = this.intervalTreeY.query(this.mario.y, this.mario.y + this.mario.height);
-      } else {
-        objectCollisionX = this.objectIntervalTreeX.query(this.mario.x - this.mario.width - this.horVel, this.mario.x);
-        objectCollisionY = this.objectIntervalTreeY.query(this.mario.y, this.mario.y + this.mario.height);
+          characterCollisionX = this.intervalTreeX.query(this.mario.x, this.mario.x + this.mario.width);
+          characterCollisionY = this.intervalTreeY.query(this.mario.y, this.mario.y + this.mario.height);
+        } else {
+          objectCollisionX = this.objectIntervalTreeX.query(this.mario.x - this.mario.width - this.horVel, this.mario.x);
+          objectCollisionY = this.objectIntervalTreeY.query(this.mario.y, this.mario.y + this.mario.height);
 
-        characterCollisionX = this.intervalTreeX.query(this.mario.x - this.mario.width, this.mario.x);
-        characterCollisionY = this.intervalTreeY.query(this.mario.y, this.mario.y + this.mario.height);
-      }
+          characterCollisionX = this.intervalTreeX.query(this.mario.x - this.mario.width, this.mario.x);
+          characterCollisionY = this.intervalTreeY.query(this.mario.y, this.mario.y + this.mario.height);
+        }
 
 
 
-      if(objectCollisionX && objectCollisionY) {
-        Object.keys(objectCollisionX).forEach((id) => {
-          if (objectCollisionY[id]) {
-            if (this.mario.y + this.mario.height <= objectCollisionY[id][0] + 2) {
-              if (this.verVel < 0 ) {
-                this.verVel = 0;
+        if(objectCollisionX && objectCollisionY) {
+          Object.keys(objectCollisionX).forEach((id) => {
+            if (objectCollisionY[id]) {
+              if (this.mario.y + this.mario.height <= objectCollisionY[id][1] + 2) {
+                if (this.verVel < 0 ) {
+                  this.verVel = 0;
+                }
+              } else if (this.mario.y + this.mario.height >= objectCollisionY[id][0]) {
+                if(this.verVel > 0) {
+                  this.verVel -= 12;
+                  this.objectsStage.handleObjectCollision(id, objectCollisionY[id][2]);
+                }
+              } else if (this.mario.x <= objectCollisionX[id][1]) {
+                objectConst = 0;
+                this.horVel = 2;
+                this.mario.x -= 4;
+              } else if (this.mario.x >= objectCollisionX[id][0]){
+                objectConst = 0;
+                this.horVel = 2;
+                this.mario.x += 4;
               }
-            } else if (this.mario.y + this.mario.height >= objectCollisionY[id][1]) {
-              if(this.verVel > 0) {
-                this.verVel -= 12;
-                this.objectsStage.handleObjectCollision(id, objectCollisionY[id][2]);
+            }
+          });
+        }
+
+        if(characterCollisionX && characterCollisionY) {
+          Object.keys(characterCollisionX).forEach((id) => {
+            if (characterCollisionY[id]) {
+              if (this.mario.y + this.mario.height <= characterCollisionY[id][0] + 3) {
+                this.charactersStage.handleCharacterCollision(id, characterCollisionY[id][2]);
+                this.mario.y -= 20;
+              } else {
+                this.handleCharacterCollision();
               }
-            } else if (this.mario.x <= objectCollisionX[id][1]) {
-              objectConst = 0;
-              this.horVel = 2;
-              this.mario.x -= 4;
-            } else if (this.mario.x >= objectCollisionX[id][0]){
-              objectConst = 0;
-              this.horVel = 2;
-              this.mario.x += 4;
+            }
+          });
+        }
+        if(Date.now() - this.now > 3) {
+        if (this.horVel !== 0 && this.mario.scaleX === 1 && this.mario.x >= 400) {
+            this.charactersStage.handleMovingThroughLevel(this.horVel);
+            this.objectsStage.handleMovingThroughLevel(this.horVel);
+
+            let objectRand = Math.random();
+            if (objectRand < .015) {
+              this.objectsStage.addObjects();
+            } else if (objectRand < .023) {
+              if (objectRand < .018) {
+                this.charactersStage.addPirahnaPlant();
+              }
+              this.objectsStage.addWarpPipe();
+            }
+            if (Math.random() < .023) {
+              this.objectsStage.addBackground();
+            }
+            if (Math.random() < .03) {
+              this.charactersStage.addCharacters();
             }
           }
-        });
-      }
-      if(characterCollisionX && characterCollisionY) {
-        Object.keys(characterCollisionX).forEach((id) => {
-          if (characterCollisionY[id]) {
-            console.log(characterCollisionY[id][2]);
-            if (this.mario.y + this.mario.height <= characterCollisionY[id][0] + 3) {
-              this.charactersStage.handleCharacterCollision(id, characterCollisionY[id][2]);
-              this.mario.y -= 20;
-            } else {
-              this.handleCharacterCollision();
-            }
-          }
-        });
-      }
+        }
 
-      if (this.horVel !== 0 && this.mario.scaleX === 1 && this.mario.x > 400) {
-          this.charactersStage.handleMovingThroughLevel(this.horVel);
-          this.objectsStage.handleMovingThroughLevel(this.horVel);
-          if(Math.random() < .015) {
-            this.objectsStage.addObjects();
-          }
-      }
+        this.now = Date.now();
 
-      if (this.verVel === 0 && this.mario.currentAnimation === "jump") {
-        this.mario.gotoAndStop("jump");
-        this.mario.gotoAndPlay("stand");
-        this.numJumps = 0;
-      } else if (this.horVel === 0 && this.mario.currentAnimation === "run") {
-        this.mario.gotoAndStop("run");
-        this.mario.gotoAndPlay("stand");
-      } else if (this.horVel !== 0 && this.mario.currentAnimation === "stand") {
-        this.mario.gotoAndStop("stand");
-        this.mario.gotoAndPlay("run");
-      }
+        if (this.verVel === 0 && this.mario.currentAnimation === "jump") {
+          this.mario.gotoAndStop("jump");
+          this.mario.gotoAndPlay("stand");
+          this.numJumps = 0;
+        } else if (this.horVel === 0 && this.mario.currentAnimation === "run") {
+          this.mario.gotoAndStop("run");
+          this.mario.gotoAndPlay("stand");
+        } else if (this.horVel !== 0 && this.mario.currentAnimation === "stand") {
+          this.mario.gotoAndStop("stand");
+          this.mario.gotoAndPlay("run");
+        }
 
 
-      this.mario.y - this.verVel > 331 ? this.mario.y = 332 : this.mario.y -= this.verVel;
-      if (((this.mario.x < 400) || this.mario.scaleX === -1) && (this.mario.x > 24 || this.mario.scaleX === 1)) {
-        this.mario.x += this.mario.scaleX * this.horVel * objectConst;
+        this.mario.y - this.verVel > 331 ? this.mario.y = 332 : this.mario.y -= this.verVel;
+        if (((this.mario.x < 400) || this.mario.scaleX === -1) && (this.mario.x > 24 || this.mario.scaleX === 1)) {
+          this.mario.x += this.mario.scaleX * this.horVel * objectConst;
+        }
+        this.stage.update();
+        this.objectsStage.stage.update();
       }
-      this.stage.update();
-      this.objectsStage.stage.update();
+      this.tick = Date.now();
     }
   }
 
@@ -196,9 +218,9 @@ class Mario extends Character {
       ],
       animations: {
         stand: 0,
-        run: [1,3, "run", .1],
+        run: [1,3, "run", .2],
         jump: [4, 4, "jump"],
-        dead: [5, 6, "dead"]
+        dead: [5, 6, "dead", .5]
       },
     };
     let spriteSheet = new createjs.SpriteSheet(spriteData);
@@ -246,8 +268,11 @@ class Mario extends Character {
         this.horVel += Mario.HORVEL;
         }
       } else if (this.keys[key] === "jump" && this.numJumps < 2) {
-        this.verVel += 25;
+        this.verVel += 27;
         this.numJumps += 1;
+        if (this.numJumps == 2) {
+          this.shouldDecelerate = true;
+        }
       }
     }
   }

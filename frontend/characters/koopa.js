@@ -1,18 +1,20 @@
 import Character from './character';
 
 class Koopa extends Character{
-  constructor(stage, objectsStage, id, x, y){
+  constructor(stage, objectsStage, id, x, y, scaleX){
     super(objectsStage);
     this.stage = stage;
     this.id = id;
     this.pos = [x, y];
     this.horVel = 0;
     this.verVel = 0;
+    this.scaleX = scaleX;
     this.imageLoaded  = this.imageLoaded.bind(this);
     this.handleTick = this.handleTick.bind(this);
     this.loadImage();
     createjs.Ticker.addEventListener("tick", this.handleTick);
     this.shouldDecelerate = true;
+    this.tick = Date.now();
   }
 
   loadImage() {
@@ -25,25 +27,28 @@ class Koopa extends Character{
   }
 
   handleTick(){
-    if(this.active && !this.isMarioMoving) {
-      if (this.koopa.scaleX === 1) {
-        this.intervalTreeX.removeInterval(this.koopa.x, this.koopa.x + this.koopa.width, "koopa", this.id);
-        this.intervalTreeY.removeInterval(this.koopa.y + 5, this.koopa.y + this.koopa.height, "koopa", this.id);
-        this.koopa.x -= 1;
-        this.intervalTreeX.insertInterval(this.koopa.x, this.koopa.x +  + this.koopa.width, "koopa", this.id);
-        this.intervalTreeY.insertInterval(this.koopa.y + 5, this.koopa.y + this.koopa.height, "koopa", this.id);
-      } else {
-        this.intervalTreeX.removeInterval(this.koopa.x - this.koopa.width, this.koopa.x, "koopa", this.id);
-        this.intervalTreeY.removeInterval(this.koopa.y + 5, this.koopa.y + this.koopa.height, "koopa", this.id);
-        this.koopa.x += 1;
-        this.intervalTreeX.insertInterval(this.koopa.x - this.koopa.width, this.koopa.x, "koopa", this.id);
-        this.intervalTreeY.insertInterval(this.koopa.y + 5, this.koopa.y + this.koopa.height, "koopa", this.id);
-      }
-        this.detectObjectCollision();
+    if(Date.now() - this.tick > window.tickDelay ) {
+      if(this.active && !this.isMarioMoving) {
+        if (this.koopa.scaleX === 1) {
+          this.intervalTreeX.removeInterval(this.koopa.x, this.koopa.x + this.koopa.width, "koopa", this.id);
+          this.intervalTreeY.removeInterval(this.koopa.y + 5, this.koopa.y + this.koopa.height, "koopa", this.id);
+          this.koopa.x -= 1;
+          this.intervalTreeX.insertInterval(this.koopa.x, this.koopa.x +  + this.koopa.width, "koopa", this.id);
+          this.intervalTreeY.insertInterval(this.koopa.y + 5, this.koopa.y + this.koopa.height, "koopa", this.id);
+        } else {
+          this.intervalTreeX.removeInterval(this.koopa.x - this.koopa.width, this.koopa.x, "koopa", this.id);
+          this.intervalTreeY.removeInterval(this.koopa.y + 5, this.koopa.y + this.koopa.height, "koopa", this.id);
+          this.koopa.x += 1;
+          this.intervalTreeX.insertInterval(this.koopa.x - this.koopa.width, this.koopa.x, "koopa", this.id);
+          this.intervalTreeY.insertInterval(this.koopa.y + 5, this.koopa.y + this.koopa.height, "koopa", this.id);
+        }
+          this.detectObjectCollision();
       } else {
         this.isMarioMoving = false;
         this.horVel = null;
       }
+      this.tick = Date.now();
+    }
   }
 
   handleCharacterCollision() {
@@ -94,14 +99,14 @@ class Koopa extends Character{
       this.intervalTreeX.removeInterval(this.koopa.x, this.koopa.x + this.koopa.width, "koopa", this.id)
       this.intervalTreeY.removeInterval(this.koopa.y, this.koopa.y + this.koopa.height, "koopa", this.id);
       if (this.koopa.scaleX == 1) {
-        this.koopa.x -= this.koopa.scaleX * horVel - 1;
+        this.koopa.x -= horVel + 1;
       } else {
-        this.koopa.x += this.koopa.scaleX * horVel + 1;
+        this.koopa.x -= horVel - 1;
       }
       this.intervalTreeX.insertInterval(this.koopa.x, this.koopa.x + this.koopa.width, "koopa", this.id)
       this.intervalTreeY.insertInterval(this.koopa.y, this.koopa.y + this.koopa.height, "koopa", this.id);
       this.isMarioMoving = true
-    } 
+    }
   }
 
   imageLoaded() {
@@ -125,7 +130,7 @@ class Koopa extends Character{
     this.koopa.x = this.pos[0];
     this.koopa.width = 22;
     this.koopa.height = 34;
-    this.koopa.scaleX = -1;
+    this.koopa.scaleX = this.scaleX;
     createjs.Ticker.framerate = 25;
     this.stage.addChild(this.koopa);
     this.active = true;
