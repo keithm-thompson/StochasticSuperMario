@@ -105,11 +105,11 @@ class Mario extends Character {
         if(objectCollisionX && objectCollisionY) {
           Object.keys(objectCollisionX).forEach((id) => {
             if (objectCollisionY[id]) {
-              if (this.mario.y + this.mario.height <= objectCollisionY[id][1] + 2) {
+              if (this.mario.y + this.mario.height <= objectCollisionY[id][0] + 2) {
                 if (this.verVel < 0 ) {
                   this.verVel = 0;
                 }
-              } else if (this.mario.y + this.mario.height >= objectCollisionY[id][0]) {
+              } else if (this.mario.y + this.mario.height >= objectCollisionY[id][1]) {
                 if(this.verVel > 0) {
                   this.verVel -= 12;
                   this.objectsStage.handleObjectCollision(id, objectCollisionY[id][2]);
@@ -124,6 +124,7 @@ class Mario extends Character {
                 this.mario.x += 4;
               }
             }
+            return;
           });
         }
 

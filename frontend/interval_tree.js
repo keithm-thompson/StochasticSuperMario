@@ -97,7 +97,6 @@ class IntervalTree {
             this.center = this.lowerTree.center;
 
             this.overlappingIntervals = this.lowerTree.overlappingIntervals;
-            this.lowerTree.parent = this.parent;
             let tempHigherTree = this.lowerTree.higherTree;
             this.lowerTree = this.lowerTree.lowerTree;
             this.higherTree = tempHigherTree;
@@ -108,13 +107,13 @@ class IntervalTree {
              this.center = this.higherTree.center;
 
              this.overlappingIntervals = this.higherTree.overlappingIntervals;
-             this.higherTree.parent = this.parent;
              this.lowerTree = this.higherTree.lowerTree;
              this.higherTree = this.higherTree.higherTree;
+
          } else {
            if (this.parent.lowerTree == this) {
              this.parent.lowerTree = null;
-           } else {
+           } else if (this.parent.higherTree == this){
              this.parent.higherTree = null;
            }
          }
@@ -122,19 +121,27 @@ class IntervalTree {
      }
   }
 
-  removeTwoChildrenNode(node, currentMostMinParent) {
+  removeTwoChildrenNode(node, parent) {
     if (node.lowerTree && node.lowerTree.min && node.higherTree && node.higherTree.min) {
       return this.removeTwoChildrenNode(node.lowerTree, node);
     } else if (node.lowerTree && node.lowerTree.min) {
       return this.removeTwoChildrenNode(node.lowerTree, node);
     } else if (node.higherTree && node.higherTree.min){
-      if(currentMostMinParent) {
-        currentMostMinParent.lowerTree = node.higherTree;
+      if(parent) {
+        if (parent.lowerTree == node) {
+          parent.lowerTree = node.higherTree;
+        } else if (parent.higherTree == node){
+          parent.higherTree = node.higherTree;
+        }
       }
       return node;
     } else {
-      if(currentMostMinParent) {
-        currentMostMinParent.lowerTree = null;
+      if(parent) {
+        if (parent.lowerTree == node) {
+          parent.lowerTree = null;
+        } else if (parent.higherTree == node){
+          parent.higherTree = null;
+        }
       }
       return node;
     }

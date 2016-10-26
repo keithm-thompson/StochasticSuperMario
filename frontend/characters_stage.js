@@ -12,9 +12,11 @@ class CharactersStage {
     this.characters = {};
     this.characters[1] = new Goomba(stage, objectsStage, 1, 350, 370, 1);
     this.characters[2] = new Koopa(stage, objectsStage, 2, 400, 370, -1);
-    this.characters[3] = new Bullet(stage, objectsStage, 3, -25, 225, -1);
-    this.characters[4] = new PiranhaPlant(objectsStage, objectsStage, 4, 236, 370);
-    this.currentId = 5;
+    this.characters[3] = new Koopa(stage, objectsStage, 3, 200, 370, -1);
+    this.characters[4] = new Koopa(stage, objectsStage, 4, 470, 370, 1);
+    this.characters[5] = new Bullet(stage, objectsStage, 5, -25, 225, -1);
+    this.characters[6] = new PiranhaPlant(objectsStage, objectsStage, 6, 236, 370);
+    this.currentId = 7;
     this.mario = new Mario(stage, objectsStage, this);
     this.handleCharacterCollision = this.handleCharacterCollision.bind(this);
   }

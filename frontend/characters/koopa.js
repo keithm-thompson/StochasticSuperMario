@@ -15,6 +15,7 @@ class Koopa extends Character{
     createjs.Ticker.addEventListener("tick", this.handleTick);
     this.shouldDecelerate = true;
     this.tick = Date.now();
+    this.shell = false;
   }
 
   loadImage() {
@@ -27,18 +28,22 @@ class Koopa extends Character{
   }
 
   handleTick(){
+    let shellConstant = 1;
+    if (this.shell) {
+      shellConstant = 6;
+    }
     if(Date.now() - this.tick > window.tickDelay ) {
-      if(this.active && !this.isMarioMoving) {
+      if((this.active || this.shell) && !this.isMarioMoving) {
         if (this.koopa.scaleX === 1) {
           this.intervalTreeX.removeInterval(this.koopa.x, this.koopa.x + this.koopa.width, "koopa", this.id);
           this.intervalTreeY.removeInterval(this.koopa.y + 5, this.koopa.y + this.koopa.height, "koopa", this.id);
-          this.koopa.x -= 1;
-          this.intervalTreeX.insertInterval(this.koopa.x, this.koopa.x +  + this.koopa.width, "koopa", this.id);
+          this.koopa.x -= 1 * shellConstant;
+          this.intervalTreeX.insertInterval(this.koopa.x, this.koopa.x + this.koopa.width, "koopa", this.id);
           this.intervalTreeY.insertInterval(this.koopa.y + 5, this.koopa.y + this.koopa.height, "koopa", this.id);
         } else {
           this.intervalTreeX.removeInterval(this.koopa.x - this.koopa.width, this.koopa.x, "koopa", this.id);
           this.intervalTreeY.removeInterval(this.koopa.y + 5, this.koopa.y + this.koopa.height, "koopa", this.id);
-          this.koopa.x += 1;
+          this.koopa.x += 1 * shellConstant;
           this.intervalTreeX.insertInterval(this.koopa.x - this.koopa.width, this.koopa.x, "koopa", this.id);
           this.intervalTreeY.insertInterval(this.koopa.y + 5, this.koopa.y + this.koopa.height, "koopa", this.id);
         }
@@ -53,12 +58,16 @@ class Koopa extends Character{
 
   handleCharacterCollision() {
     this.active = false;
-    if(this.koopa.scaleX === 1) {
-      this.intervalTreeX.removeInterval(this.koopa.x, this.koopa.x + this.koopa.width, "koopa", this.id);
-      this.intervalTreeY.removeInterval(this.koopa.y, this.koopa.y + this.koopa.height, "koopa", this.id);
-    } else {
-      this.intervalTreeX.removeInterval(this.koopa.x - this.koopa.width, this.koopa.x, "koopa", this.id);
-      this.intervalTreeY.removeInterval(this.koopa.y, this.koopa.y + this.koopa.height, "koopa", this.id);
+    this.shell = !this.shell;
+    if(!this.shell) {
+      if(this.koopa.scaleX === 1) {
+        this.intervalTreeX.removeInterval(this.koopa.x - this.koopa.width, this.koopa.x, "koopa", this.id);
+        this.intervalTreeY.removeInterval(this.koopa.y, this.koopa.y + this.koopa.height, "koopa", this.id);
+      } else {
+        this.intervalTreeX.removeInterval(this.koopa.x, this.koopa.x + this.koopa.width, "koopa", this.id);
+        this.intervalTreeY.removeInterval(this.koopa.y, this.koopa.y + this.koopa.height, "koopa", this.id);
+      }
+      this.stage.removeChild(this.koopa);
     }
     this.squashedAnimation();
   }
@@ -71,21 +80,27 @@ class Koopa extends Character{
   detectObjectCollision() {
     let objectCollisionX, objectCollisionY;
     if (this.koopa.scaleX === 1) {
-      objectCollisionX = this.objectIntervalTreeX.query(this.koopa.x - this.koopa.width, this.koopa.x);
+      objectCollisionX = this.objectIntervalTreeX.query(this.koopa.x, this.koopa.x + this.koopa.width);
       objectCollisionY = this.objectIntervalTreeY.query(this.koopa.y, this.koopa.y + this.koopa.height);
     } else {
-      objectCollisionX = this.objectIntervalTreeX.query(this.koopa.x, this.koopa.x + this.koopa.width);
+      objectCollisionX = this.objectIntervalTreeX.query(this.koopa.x - this.koopa.width, this.koopa.x);
       objectCollisionY = this.objectIntervalTreeY.query(this.koopa.y, this.koopa.y + this.koopa.height);
     }
 
     if(objectCollisionX && objectCollisionY) {
       Object.keys(objectCollisionX).forEach((object) => {
         if (objectCollisionY[object]) {
-          this.koopa.scaleX = -1 * this.koopa.scaleX;
           if (this.horVel) {
-            this.intervalTreeX.removeInterval(this.koopa.x, this.koopa.x + this.koopa.width, "koopa", this.id)
-            this.koopa.x += this.koopa.scaleX * (this.horVel + 15);
-            this.intervalTreeX.insertInterval(this.koopa.x, this.koopa.x + this.koopa.width, "koopa", this.id)
+            if (this.koopa.scaleX === 1) {
+              this.intervalTreeX.removeInterval(this.koopa.x, this.koopa.x + this.koopa.width, "koopa", this.id)
+              this.koopa.x += this.horVel + 15;
+              this.intervalTreeX.insertInterval(this.koopa.x, this.koopa.x + this.koopa.width, "koopa", this.id)
+            } else {
+              this.intervalTreeX.removeInterval(this.koopa.x, this.koopa.x + this.koopa.width, "koopa", this.id)
+              this.koopa.x -=  this.horVel - 15;
+              this.intervalTreeX.insertInterval(this.koopa.x, this.koopa.x + this.koopa.width, "koopa", this.id)
+            }
+            this.koopa.scaleX = -1 * this.koopa.scaleX;
           }
         }
       });

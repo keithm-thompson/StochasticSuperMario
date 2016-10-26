@@ -13,7 +13,8 @@ class ObjectsStage {
     this.objects[3] = new Block(stage, 3, 217, 250, this);
     this.objects[5] = new Block(stage, 5, 234, 250, this);
     this.objects[6] = new Block(stage, 6, 251, 250, this);
-    this.currentId = 7;
+    this.objects[7] = new WarpPipe(stage, 7, 310, 370, this);
+    this.currentId = 8;
     this.lastItemAdded  = null;
     this.initialBackground();
     this.addBackground();
