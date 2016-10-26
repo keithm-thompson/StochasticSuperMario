@@ -134,7 +134,15 @@ class Mario extends Character {
           Object.keys(characterCollisionX).forEach((id) => {
             if (characterCollisionY[id]) {
               if (this.distanceBetween(characterCollisionX[id], characterCollisionY[id])) {
-                if (this.mario.y + this.mario.height <= characterCollisionY[id][0] + 3) {
+                if (characterCollisionY[id][2] == "koopa" || characterCollisionY[id][2] == "goomba") {
+                  if (this.mario.y + this.mario.height <= characterCollisionY[id][0] + 5) {
+                    this.charactersStage.handleCharacterCollision(id, characterCollisionY[id][2]);
+                    this.mario.y -= 20;
+                  } else {
+                    this.handleCharacterCollision();
+                  }
+                }
+                else if (this.mario.y + this.mario.height <= characterCollisionY[id][0]) {
                   this.charactersStage.handleCharacterCollision(id, characterCollisionY[id][2]);
                   this.mario.y -= 20;
                 } else {
@@ -144,7 +152,7 @@ class Mario extends Character {
             }
           });
         }
-        if(Date.now() - this.now > 3) {
+        if(Date.now() - this.now > 15) {
         if (this.horVel !== 0 && this.mario.scaleX === 1 && this.mario.x >= 400) {
             this.charactersStage.handleMovingThroughLevel(this.horVel);
             this.objectsStage.handleMovingThroughLevel(this.horVel);

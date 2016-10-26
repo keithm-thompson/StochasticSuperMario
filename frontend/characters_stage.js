@@ -36,13 +36,13 @@ class CharactersStage {
         x = -25;
       } else {
         scaleX = 1;
-        x = 1100;
+        x = 1130;
       }
       this.characters[this.currentId] = new Koopa(
         this.stage,
         this,
         this.currentId,
-        1100,
+        1130,
         370,
         scaleX
         );
@@ -52,13 +52,13 @@ class CharactersStage {
         x = -25;
       } else {
         scaleX = 1;
-        x = 1100;
+        x = 1130;
       }
         this.characters[this.currentId] = new Goomba(
           this.stage,
           this,
           this.currentId,
-          1100,
+          1130,
           370,
           scaleX
           );
@@ -68,7 +68,7 @@ class CharactersStage {
         x = -25;
       } else {
         scaleX = 1;
-        x = 1100;
+        x = 1130;
       }
       this.characters[this.currentId] = new Bullet(
         this.stage,

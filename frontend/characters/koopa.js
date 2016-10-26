@@ -28,26 +28,25 @@ class Koopa extends Character{
   }
 
   handleTick(){
-    let shellConstant = 1;
     if (this.shell) {
-      shellConstant = 6;
+      this.shellConstant = 6;
     }
     if(Date.now() - this.tick > window.tickDelay ) {
       if((this.active || this.shell) && !this.isMarioMoving) {
+        this.detectObjectCollision();
         if (this.koopa.scaleX === 1) {
           this.intervalTreeX.removeInterval(this.koopa.x, this.koopa.x + this.koopa.width, "koopa", this.id);
-          this.intervalTreeY.removeInterval(this.koopa.y + 5, this.koopa.y + this.koopa.height, "koopa", this.id);
-          this.koopa.x -= 1 * shellConstant;
+          this.intervalTreeY.removeInterval(this.koopa.y, this.koopa.y + this.koopa.height, "koopa", this.id);
+          this.koopa.x -= 1 * this.shellConstant;
           this.intervalTreeX.insertInterval(this.koopa.x, this.koopa.x + this.koopa.width, "koopa", this.id);
-          this.intervalTreeY.insertInterval(this.koopa.y + 5, this.koopa.y + this.koopa.height, "koopa", this.id);
+          this.intervalTreeY.insertInterval(this.koopa.y, this.koopa.y + this.koopa.height, "koopa", this.id);
         } else {
           this.intervalTreeX.removeInterval(this.koopa.x - this.koopa.width, this.koopa.x, "koopa", this.id);
-          this.intervalTreeY.removeInterval(this.koopa.y + 5, this.koopa.y + this.koopa.height, "koopa", this.id);
-          this.koopa.x += 1 * shellConstant;
+          this.intervalTreeY.removeInterval(this.koopa.y, this.koopa.y + this.koopa.height, "koopa", this.id);
+          this.koopa.x += 1 * this.shellConstant;
           this.intervalTreeX.insertInterval(this.koopa.x - this.koopa.width, this.koopa.x, "koopa", this.id);
-          this.intervalTreeY.insertInterval(this.koopa.y + 5, this.koopa.y + this.koopa.height, "koopa", this.id);
+          this.intervalTreeY.insertInterval(this.koopa.y, this.koopa.y + this.koopa.height, "koopa", this.id);
         }
-          this.detectObjectCollision();
       } else {
         this.isMarioMoving = false;
         this.horVel = null;
@@ -93,30 +92,42 @@ class Koopa extends Character{
           if (this.horVel) {
             if (this.koopa.scaleX === 1) {
               this.intervalTreeX.removeInterval(this.koopa.x, this.koopa.x + this.koopa.width, "koopa", this.id)
-              this.koopa.x += this.horVel + 15;
+              this.koopa.x += (this.horVel + this.koopa.width + 10);
               this.intervalTreeX.insertInterval(this.koopa.x, this.koopa.x + this.koopa.width, "koopa", this.id)
             } else {
               this.intervalTreeX.removeInterval(this.koopa.x, this.koopa.x + this.koopa.width, "koopa", this.id)
-              this.koopa.x -=  this.horVel - 15;
+              this.koopa.x -=  (this.horVel + this.koopa.width + 10);
               this.intervalTreeX.insertInterval(this.koopa.x, this.koopa.x + this.koopa.width, "koopa", this.id)
             }
-            this.koopa.scaleX = -1 * this.koopa.scaleX;
+
+          } else {
+            if (this.koopa.scaleX === 1) {
+            this.intervalTreeX.removeInterval(this.koopa.x, this.koopa.x + this.koopa.width, "koopa", this.id)
+            this.koopa.x += (this.koopa.width + 10);
+            this.intervalTreeX.insertInterval(this.koopa.x, this.koopa.x + this.koopa.width, "koopa", this.id)
+          } else {
+            this.intervalTreeX.removeInterval(this.koopa.x, this.koopa.x + this.koopa.width, "koopa", this.id)
+            this.koopa.x -=  (this.koopa.width + 10);
+            this.intervalTreeX.insertInterval(this.koopa.x, this.koopa.x + this.koopa.width, "koopa", this.id)
           }
+
+          }
+          this.koopa.scaleX = -1 * this.koopa.scaleX;
         }
       });
     }
   }
 
   handleMovingThroughLevel(horVel) {
-    if (this.active) {
+    if (this.active || this.shell) {
       this.horVel = horVel;
       this.detectObjectCollision();
       this.intervalTreeX.removeInterval(this.koopa.x, this.koopa.x + this.koopa.width, "koopa", this.id)
       this.intervalTreeY.removeInterval(this.koopa.y, this.koopa.y + this.koopa.height, "koopa", this.id);
       if (this.koopa.scaleX == 1) {
-        this.koopa.x -= horVel + 1;
+        this.koopa.x -= (horVel + 1 * this.shellConstant);
       } else {
-        this.koopa.x -= horVel - 1;
+        this.koopa.x -= (horVel - 1 * this.shellConstant);
       }
       this.intervalTreeX.insertInterval(this.koopa.x, this.koopa.x + this.koopa.width, "koopa", this.id)
       this.intervalTreeY.insertInterval(this.koopa.y, this.koopa.y + this.koopa.height, "koopa", this.id);
@@ -145,12 +156,12 @@ class Koopa extends Character{
     this.koopa.x = this.pos[0];
     this.koopa.width = 22;
     this.koopa.height = 34;
+    this.shellConstant = 1;
     this.koopa.scaleX = this.scaleX;
     createjs.Ticker.framerate = 25;
     this.stage.addChild(this.koopa);
     this.active = true;
     this.koopa.gotoAndPlay("move");
-     ;
   }
 
 }
