@@ -90,13 +90,13 @@ class Mario extends Character {
           objectCollisionX = this.objectIntervalTreeX.query(this.mario.x, this.mario.x + this.mario.width + this.horVel);
           objectCollisionY = this.objectIntervalTreeY.query(this.mario.y, this.mario.y + this.mario.height );
 
-          characterCollisionX = this.intervalTreeX.query(this.mario.x, this.mario.x + this.mario.width);
+          characterCollisionX = this.intervalTreeX.query(this.mario.x + 2, this.mario.x + this.mario.width - 2);
           characterCollisionY = this.intervalTreeY.query(this.mario.y, this.mario.y + this.mario.height);
         } else {
           objectCollisionX = this.objectIntervalTreeX.query(this.mario.x - this.mario.width - this.horVel, this.mario.x);
           objectCollisionY = this.objectIntervalTreeY.query(this.mario.y, this.mario.y + this.mario.height);
 
-          characterCollisionX = this.intervalTreeX.query(this.mario.x - this.mario.width, this.mario.x);
+          characterCollisionX = this.intervalTreeX.query(this.mario.x - this.mario.width + 2, this.mario.x - 2);
           characterCollisionY = this.intervalTreeY.query(this.mario.y, this.mario.y + this.mario.height);
         }
 
@@ -105,23 +105,25 @@ class Mario extends Character {
         if(objectCollisionX && objectCollisionY) {
           Object.keys(objectCollisionX).forEach((id) => {
             if (objectCollisionY[id]) {
-              if (this.mario.y + this.mario.height <= objectCollisionY[id][0] + 2) {
-                if (this.verVel < 0 ) {
-                  this.verVel = 0;
+              if (this.distanceBetween(objectCollisionX[id], objectCollisionY[id])) {
+                if (this.mario.y + this.mario.height <= objectCollisionY[id][0] + 5) {
+                  if (this.verVel < 0 ) {
+                    this.verVel = 0;
+                  }
+                } else if (this.mario.y + this.mario.height >= objectCollisionY[id][1]) {
+                  if(this.verVel > 0) {
+                    this.verVel -= 12;
+                    this.objectsStage.handleObjectCollision(id, objectCollisionY[id][2]);
+                  }
+                } else if (this.mario.x <= objectCollisionX[id][1]) {
+                  objectConst = 0;
+                  this.horVel = 2;
+                  this.mario.x -= 4;
+                } else if (this.mario.x >= objectCollisionX[id][0]){
+                  objectConst = 0;
+                  this.horVel = 2;
+                  this.mario.x += 4;
                 }
-              } else if (this.mario.y + this.mario.height >= objectCollisionY[id][1]) {
-                if(this.verVel > 0) {
-                  this.verVel -= 12;
-                  this.objectsStage.handleObjectCollision(id, objectCollisionY[id][2]);
-                }
-              } else if (this.mario.x <= objectCollisionX[id][1]) {
-                objectConst = 0;
-                this.horVel = 2;
-                this.mario.x -= 4;
-              } else if (this.mario.x >= objectCollisionX[id][0]){
-                objectConst = 0;
-                this.horVel = 2;
-                this.mario.x += 4;
               }
             }
             return;
@@ -131,11 +133,13 @@ class Mario extends Character {
         if(characterCollisionX && characterCollisionY) {
           Object.keys(characterCollisionX).forEach((id) => {
             if (characterCollisionY[id]) {
-              if (this.mario.y + this.mario.height <= characterCollisionY[id][0] + 3) {
-                this.charactersStage.handleCharacterCollision(id, characterCollisionY[id][2]);
-                this.mario.y -= 20;
-              } else {
-                this.handleCharacterCollision();
+              if (this.distanceBetween(characterCollisionX[id], characterCollisionY[id])) {
+                if (this.mario.y + this.mario.height <= characterCollisionY[id][0] + 3) {
+                  this.charactersStage.handleCharacterCollision(id, characterCollisionY[id][2]);
+                  this.mario.y -= 20;
+                } else {
+                  this.handleCharacterCollision();
+                }
               }
             }
           });
@@ -187,6 +191,25 @@ class Mario extends Character {
       }
       this.tick = Date.now();
     }
+  }
+
+  distanceBetween(xCoords, yCoords) {
+    if (this.mario.scaleX === 1) {
+      if (((this.mario.x >= xCoords[0] && this.mario.x <= xCoords[1]) ||
+      (this.mario.x + this.mario.width >= xCoords[0] && this.mario.x + this.mario.width <= xCoords[1])) &&
+      (this.mario.y >= yCoords[0] && this.mario.y <= yCoords[1]) ||
+      (this.mario.y + this.mario.height >= yCoords[0] && this.mario.y + this.mario.height <= yCoords[1])) {
+        return true;
+      }
+    } else {
+      if (((this.mario.x >= xCoords[0] && this.mario.x <= xCoords[1]) ||
+      (this.mario.x - this.mario.width >= xCoords[0] && this.mario.x - this.mario.width <= xCoords[1])) &&
+      (this.mario.y >= yCoords[0] && this.mario.y <= yCoords[1]) ||
+      (this.mario.y + this.mario.height >= yCoords[0] && this.mario.y + this.mario.height <= yCoords[1])) {
+        return true;
+      }
+    }
+    return false;
   }
 
   handleCharacterCollision() {
