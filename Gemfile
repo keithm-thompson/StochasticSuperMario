@@ -1,6 +1,7 @@
 source "https://rubygems.org"
 
 gem "bezel-app"
+gem 'pg'
 
 group :production do
   gem 'newrelic_rpm'
