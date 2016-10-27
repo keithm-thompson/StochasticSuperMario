@@ -7,7 +7,7 @@ GEM
       minitest (~> 5.1)
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
-    bezel-app (0.1.6)
+    bezel-app (0.1.12)
       activesupport (~> 4.2, >= 4.2.5.1)
       fileutils (~> 0.7)
       pg (~> 0.18)
@@ -44,7 +44,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  bezel-app (~> 0.1.6)
+  bezel-app (~> 0.1.12)
   newrelic_rpm
   pg
   rails_12factor
