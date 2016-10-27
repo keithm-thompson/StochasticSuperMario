@@ -1,0 +1,3 @@
+config.serve_static_files = true
+# ...
+config.log_level = :debug
