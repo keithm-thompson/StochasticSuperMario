@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-gem "bezel-app", "~> 0.1.5"
+gem "bezel-app", "~> 0.1.12"
 gem 'pg'
 
 group :production do
