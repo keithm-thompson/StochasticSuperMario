@@ -1,14 +1,14 @@
 import Character from './character';
 
 class Goomba extends Character{
-  constructor(stage, objectsStage, id, x, y, scaleX){
+  constructor(stage, objectsStage, id, x, y, direction){
     super(objectsStage);
     this.stage = stage;
     this.id = id;
     this.pos = [x, y];
     this.horVel = 0;
     this.verVel = 0;
-    this.scaleX = scaleX;
+    this.direction = direction;
     this.imageLoaded  = this.imageLoaded.bind(this);
     this.handleTick = this.handleTick.bind(this);
     this.loadImage();
@@ -32,7 +32,7 @@ class Goomba extends Character{
       if(this.active && !this.isMarioMoving) {
         this.intervalTreeX.removeInterval(this.goomba.x, this.goomba.x + this.goomba.width, "goomba", this.id);
         this.intervalTreeY.removeInterval(this.goomba.y, this.goomba.y + this.goomba.height, "goomba", this.id);
-        this.goomba.x += this.goomba.direction * 1;
+        this.goomba.x += this.goomba.direction;
         this.intervalTreeX.insertInterval(this.goomba.x, this.goomba.x + this.goomba.width, "goomba", this.id);
         this.intervalTreeY.insertInterval(this.goomba.y, this.goomba.y + this.goomba.height, "goomba", this.id);
         this.detectObjectCollision();
@@ -84,11 +84,13 @@ class Goomba extends Character{
       this.detectObjectCollision();
       this.intervalTreeX.removeInterval(this.goomba.x, this.goomba.x + this.goomba.width, "goomba", this.id);
       this.intervalTreeY.removeInterval(this.goomba.y, this.goomba.y + this.goomba.height, "goomba", this.id);
-      this.goomba.x -= this.goomba.direction * horVel - this.goomba.direction ;
+      this.goomba.x -= horVel - this.goomba.direction ;
       this.intervalTreeX.insertInterval(this.goomba.x, this.goomba.x + this.goomba.width, "goomba", this.id);
       this.intervalTreeY.insertInterval(this.goomba.y, this.goomba.y + this.goomba.height, "goomba", this.id);
       this.isMarioMoving = true;
     }
+
+
   }
 
   imageLoaded() {
@@ -113,7 +115,7 @@ class Goomba extends Character{
     this.goomba.x = this.pos[0];
     this.goomba.width = 22;
     this.goomba.height = 31;
-    this.goomba.direction = this.scaleX;
+    this.goomba.direction = this.direction;
     createjs.Ticker.framerate = 25;
     this.stage.addChild(this.goomba);
     this.active = true;

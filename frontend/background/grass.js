@@ -47,6 +47,8 @@ class Grass {
       if (this.grass.x < -100) {
         this.active = false;
         this.objectsStage.deleteObjects(this.id);
+        this.stage.removeChild(this.grass);
+
       }
   }
 }

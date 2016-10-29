@@ -7,16 +7,56 @@
     <link rel="stylesheet" type="text/css" href="app/assets/stylesheets/canvas.css"/>
   </head>
 
-  <body>
-    <% if @high_scores %>
-      <h1> it worked! <h1>
-    <% else %>
-      <h1> still have work to do :( <h1>
-    <% end %>
+  <body class="body">
+    <% @high_scores.sort! { |el1, el2| el2.score <=> el1.score } %>
     <div id="screen-container" style="position: relative;">
-      <canvas id="background-canvas"></canvas>
-      <canvas id="objects-canvas"></canvas>
-      <canvas id="characters-canvas"></canvas>
+      <div class="title">
+        <h1> StochasticSuperMario </h1>
+      </div>
+      <div class="directions">
+        <h1>Directions</h1>
+        <ul>
+          <li>
+            Use A and D or the arrow keys to move laterally.
+          </li>
+          <li>
+             W, Up-arrow, or space bar to jump.
+           </li>
+           <li>
+             Points are rewarded for jumping on a koopa, goomba, or collecting coins (coming soon).
+           </li>
+           <li>
+             Getting hit by enemies will result in losing a life!
+           </li>
+           <li>
+             Try to beat one of our high scores!
+           </li>
+        </ul>
+      </div>
+      <div id="canvas-wrapper">
+        <canvas id="background-canvas"></canvas>
+        <p id="text-canvas"></p>
+        <canvas id="objects-canvas"></canvas>
+        <canvas id="characters-canvas"></canvas>
+      </div>
+      <div class= "high-scores">
+        <h1>
+          High Scores
+        </h1>
+        <br>
+        <ul>
+          <% @high_scores.each_index do |score, idx| %>
+          <li><%= idx %>.<%= score.name %>: <%= score.score %></li>
+          <% end %>
+        </ul>
+      </div>
+      <div class="developer-information">
+        <h3> A project by Keith Thompson </h3>
+        <ul>
+          <li> Checkout the Git repository! <a href="https://www.github.com/keithm-thompson/StochasticSuperMario" target="_blank"> StochasticSuperMario </a></li>
+          <li> View my website! <a href="https://keithm-thompson.github.io/" target="_blank"> www.keithm-thompson.github.io </a> </li>
+        </ul>
+      </div>
     <div>
   </body>
 </html>

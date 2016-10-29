@@ -32,3 +32,20 @@
   margin: 0 auto;
   z-index: 2;
 }
+
+.high-scores {
+  background-color: antiquewhite;
+  position: absolute;
+  margin-left: 450px;
+  /*right: 100;
+  top: 200;*/
+  width: 150;
+  height: 400;
+  text-align: center;
+  font-family: press_startregular;
+
+}
+
+.high-scores h1 {
+  font-size: 18px;
+}

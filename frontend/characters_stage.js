@@ -6,7 +6,7 @@ import PiranhaPlant from './characters/piranha_plant';
 import ObjectsStage from './objects_stage';
 
 class CharactersStage {
-  constructor(stage, objectsStage) {
+  constructor(stage, objectsStage, textCanvas) {
     this.stage = stage;
     this.objectsStage = objectsStage;
     this.characters = {};
@@ -17,7 +17,7 @@ class CharactersStage {
     this.characters[5] = new Bullet(stage, objectsStage, 5, -25, 225, -1);
     this.characters[6] = new PiranhaPlant(objectsStage, objectsStage, 6, 236, 370);
     this.currentId = 7;
-    this.mario = new Mario(stage, objectsStage, this);
+    this.mario = new Mario(stage, objectsStage, textCanvas, this);
     this.handleCharacterCollision = this.handleCharacterCollision.bind(this);
   }
   handleMovingThroughLevel(horVel) {

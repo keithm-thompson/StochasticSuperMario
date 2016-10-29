@@ -1,34 +1,186 @@
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+@font-face {
+    font-family: 'super_mario_bros';
+    src: url('mario-font/prstart-webfont.woff2') format('woff2'),
+         url('mario-font/prstart-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'super_mario_bros';
+    src: url('super-mario-font/supermariobros-webfont.woff2') format('woff2'),
+         url('super-mario-font/supermariobros-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+.body {
+  background-color: black;
+}
+
 #screen-container {
-  display: flex; }
+  display: flex;
+  background-image: url('../images/mario-background.jpg');
+  height: 100%;
+  background-size: cover;
+  justify-content: center;
+  align-items: center;
+	flex-wrap: wrap;
+  }
+
+#canvas-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+	width: 700px;
+	margin-left: 100px;
+	margin-right: 100px;
+}
 
 #background-canvas {
   position: absolute;
-  left: 0;
-  top: 100;
-  right: 0;
-  bottom: 0;
   z-index: 0;
   margin: 0 auto;
   background-color: #48e;
 }
 
+#text-canvas {
+  z-index: 1;
+  margin: 0 auto;
+  color: white;
+  text-align: center;
+  margin-bottom: 350px;
+}
+
 #objects-canvas {
   position: absolute;
-  left: 0;
-  top: 100;
-  right: 0;
-  bottom: 0;
   margin: 0 auto;
-  z-index: 1;
+  z-index: 2;
  }
 
 #characters-canvas {
   position: absolute;
-  left: 0;
-  top: 100;
-  right: 0;
-  bottom: 0;
   margin: 0 auto;
-  z-index: 2; }
+  z-index: 3;
+}
+
+.high-scores {
+  background-color: antiquewhite;
+  width: 200;
+  height: 400;
+  text-align: center;
+  font-family: super_mario_bros;
+}
+
+.high-scores h1 {
+  padding-top: 15px;
+  margin-bottom: 10px;
+  font-size: 27px;
+	padding-left: 3px;
+	padding-right: 3px;
+}
+
+.high-scores li {
+  font-size: 15px;
+  margin-bottom: 20px;
+	padding-left: 3px;
+	padding-right: 3px;
+}
+
+.title {
+  font-size: 50px;
+  font-family: super_mario_bros;
+  text-align: center;
+	align-self: center;
+	width: 90%;
+	background-color: antiquewhite;
+}
+
+.title h1 {
+	line-height: 1.5;
+}
+
+.directions {
+  background-color: antiquewhite;
+  width: 200;
+  height: 400;
+  text-align: center;
+  font-family: super_mario_bros;
+}
+
+.directions h1 {
+	font-size: 30px;
+	padding-top: 20px;
+	margin-bottom: 15px;
+}
+
+.directions li {
+	font-size: 16px;
+	margin-bottom: 10px;
+	padding-left: 3px;
+	padding-right: 3px;
+}
+
+.developer-information {
+	font-family: super_mario_bros;
+	font-size: 20px;
+	text-align: center;
+	align-self: center;
+	width: 90%;
+	background-color: antiquewhite;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-around;
+	line-height: 2;
+}
+
+.developer-information h3{
+	align-self: center;
+	font-size: 26px;
+}
 
 /*# sourceMappingURL=canvas.css.map */
