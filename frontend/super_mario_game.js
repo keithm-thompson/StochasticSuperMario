@@ -9,7 +9,6 @@ document.addEventListener("DOMContentLoaded", function(){
   const charactersCanvas = document.getElementById("characters-canvas");
   const objectsCanvas = document.getElementById("objects-canvas");
 
-  // let textCanvas = {};
   backgroundCanvas.width = Background.WIDTH;
   textCanvas.width = Background.WIDTH;
   charactersCanvas.width = Background.WIDTH;
