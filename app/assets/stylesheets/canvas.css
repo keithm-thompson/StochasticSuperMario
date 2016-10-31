@@ -10,7 +10,7 @@ table, caption, tbody, tfoot, thead, tr, th, td,
 article, aside, canvas, details, embed,
 figure, figcaption, footer, header, hgroup,
 menu, nav, output, ruby, section, summary,
-time, mark, audio, video {
+time, mark, audio, video, button {
 	margin: 0;
 	padding: 0;
 	border: 0;
@@ -126,7 +126,7 @@ table {
 }
 
 .high-scores li {
-  font-size: 15px;
+  font-size: 18px;
   margin-bottom: 20px;
 	padding-left: 3px;
 	padding-right: 3px;
@@ -184,4 +184,39 @@ table {
 	font-size: 26px;
 }
 
+.menu {
+	background-color: antiquewhite;
+	font-family: super_mario_bros;
+	text-align: center;
+	height: 400px;
+	width: 700px;
+	z-index: 4;
+}
+
+.menu h2 {
+	font-size: 32px;
+	padding-top: 50px;
+	margin-bottom: 20px;
+	padding-left: 3px;
+	padding-right: 3px;
+}
+
+.menu p {
+	font-size: 22px;
+	padding: 5px;
+	margin-bottom: 20px;
+}
+
+.menu button {
+	font-size: 26px;
+}
+
+.menu button:hover {
+	transform: scale(1.5, 1.5);
+	cursor: pointer;
+}
+
+.hidden {
+	display: none !important;
+}
 /*# sourceMappingURL=canvas.css.map */

@@ -9,6 +9,7 @@
 
   <body class="body">
     <% @high_scores.sort! { |el1, el2| el2.score <=> el1.score } %>
+    <% @high_scores = [{ id: 1, initials: "keith", score: 1024 }]%>
     <div id="screen-container" style="position: relative;">
       <div class="title">
         <h1> StochasticSuperMario </h1>
@@ -28,12 +29,20 @@
            <li>
              Getting hit by enemies will result in losing a life!
            </li>
-           <li>
-             Try to beat one of our high scores!
-           </li>
         </ul>
       </div>
       <div id="canvas-wrapper">
+        <div id="menu" class="menu">
+          <h2>
+            Welcome To Stochastic Super Mario!
+          </h2>
+          <p>
+            A retro styled super mario game with a twist - the level will never end. As you venture past the obstacles and enemies, your future adventure will continue to randomly generate. Thus, every time you play, you can expect something different! Get started and try to beat one of our high scores!
+          </p>
+          <button id="start-game">
+            start game!
+          </button>
+        </div>
         <canvas id="background-canvas"></canvas>
         <p id="text-canvas"></p>
         <canvas id="objects-canvas"></canvas>
@@ -44,9 +53,9 @@
           High Scores
         </h1>
         <br>
-        <ul>
-          <% @high_scores.each_index do |score, idx| %>
-          <li><%= idx %>.<%= score.name %>: <%= score.score %></li>
+        <ul id="high-scores" data-length="<%= @high_scores.length%>">
+          <% @high_scores.each_with_index do |score, idx| %>
+          <li data-id="<%= score[:id] %>"><%= idx + 1 %>. <%= score[:initials] %>: <%= score[:score] %></li>
           <% end %>
         </ul>
       </div>
@@ -54,7 +63,7 @@
         <h3> A project by Keith Thompson </h3>
         <ul>
           <li> Checkout the Git repository! <a href="https://www.github.com/keithm-thompson/StochasticSuperMario" target="_blank"> StochasticSuperMario </a></li>
-          <li> View my website! <a href="https://keithm-thompson.github.io/" target="_blank"> www.keithm-thompson.github.io </a> </li>
+          <li> View my website! <a href="https://keithmthompson.com/" target="_blank"> www.keithmthompson.com </a> </li>
         </ul>
       </div>
     <div>

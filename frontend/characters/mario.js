@@ -1,5 +1,5 @@
 import Character from './character';
-// import BackgroundStage from '../background_stage';
+import { gameEnded } from '../super_mario_game';
 
 class Mario extends Character {
   constructor(stage, objectsStage, textCanvas, charactersStage){
@@ -138,8 +138,6 @@ class Mario extends Character {
           Object.keys(characterCollisionX).forEach((id) => {
             if (characterCollisionY[id]) {
               if (this.distanceBetween(characterCollisionX[id], characterCollisionY[id])) {
-                // console.log(characterCollisionX[id]);
-                // console.log(characterCollisionY[id]);
                 if (characterCollisionY[id][2] == "koopa" || characterCollisionY[id][2] == "goomba") {
                   if (this.mario.y + this.mario.height <= characterCollisionY[id][0] + 5) {
                     this.charactersStage.handleCharacterCollision(id, characterCollisionY[id][2]);
@@ -238,11 +236,14 @@ class Mario extends Character {
     this.mario.gotoAndStop("stand");
     this.mario.gotoAndPlay("dead");
     this.active = false;
-    window.setTimeout(() => {
-      this.stage.removeChild(this.mario);
-      this.handleDeath();
-    }, 350);
-
+    if (this.lives <= 0) {
+      this.handleEndOfGame();
+    } else {
+      window.setTimeout(() => {
+        this.stage.removeChild(this.mario);
+        this.handleDeath();
+      }, 350);
+    }
   }
   handleDeath() {
     this.mario.gotoAndStop("dead");
@@ -251,6 +252,10 @@ class Mario extends Character {
     this.mario.y = 331;
     this.active = true;
     this.stage.addChild(this.mario);
+  }
+
+  handleEndOfGame() {
+    gameEnded(this.score);
   }
 
   imageLoaded() {
