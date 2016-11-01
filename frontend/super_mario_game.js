@@ -2,6 +2,7 @@ import Background from './background';
 import TextCanvas from './text_canvas';
 import CharactersStage from './characters_stage';
 import ObjectsStage from './objects_stage';
+import recordHighscore from '../util/util';
 
 
 function startGame() {
@@ -9,6 +10,11 @@ function startGame() {
   let textCanvas = document.getElementById("text-canvas");
   const charactersCanvas = document.getElementById("characters-canvas");
   const objectsCanvas = document.getElementById("objects-canvas");
+
+  backgroundCanvas.className = "";
+  textCanvas.className = "" ;
+  charactersCanvas.className = "" ;
+  objectsCanvas.className = "" ;
 
   backgroundCanvas.width = Background.WIDTH;
   textCanvas.width = Background.WIDTH;
@@ -46,11 +52,34 @@ export function menu(){
 }
 
 export function gameEnded(score) {
+  const backgroundCanvas = document.getElementById("background-canvas");
+  let textCanvas = document.getElementById("text-canvas");
+  const charactersCanvas = document.getElementById("characters-canvas");
+  const objectsCanvas = document.getElementById("objects-canvas");
+
+   backgroundCanvas.className = "hidden";
+   textCanvas.className = "hidden" ;
+   charactersCanvas.className = "hidden" ;
+   objectsCanvas.className = "hidden" ;
+
   const high_scores = document.getElementById("high-scores");
+  const highScoreDiv = document.getElementById("high-score");
+  const inputInitials = document.getElementById("input-initials");
+  const submitScore = document.getElementById("submit-score");
+
+  submitScore.addEventListener("click", handleSubmit(score));
+  inputInitials.addEventListener("submit", handleSubmit(score));
+
   if (high_scores.dataset.length < 10) {
-    const highScoreDiv = document.getElementById("high-score")
     highScoreDiv.className= "menu";
   } else if (score > parseInt(high_scores.lastChild.previousSibling.innerHTML.split(':')[1])) {
-      high_scores.lastChild.previousSibling.dataset.id
+    highScoreDiv.className= "menu";
   }
+}
+
+function handleSubmit(score) {
+  return (e) => {
+    e.preventDefault();
+    recordHighscore(document.getElementById("input-initials").value, score);
+  };
 }
