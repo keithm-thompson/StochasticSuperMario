@@ -32,7 +32,7 @@
         </ul>
       </div>
       <div id="canvas-wrapper">
-        <div id="menu" class="menu">
+        <div id="menu" class="hidden">
           <h2>
             Welcome To Stochastic Super Mario!
           </h2>
@@ -41,6 +41,15 @@
           </p>
           <button id="start-game">
             start game!
+          </button>
+        </div>
+        <div id="high-score" class="menu">
+          <h2>
+            You beat one of our high scores! Please enter your initials.
+          </h2>
+          <input type="text" class="initials-input">
+          <button id="start-game">
+            submit!
           </button>
         </div>
         <canvas id="background-canvas"></canvas>

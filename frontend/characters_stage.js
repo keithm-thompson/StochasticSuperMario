@@ -9,14 +9,7 @@ class CharactersStage {
   constructor(stage, objectsStage, textCanvas) {
     this.stage = stage;
     this.objectsStage = objectsStage;
-    this.characters = {};
-    this.characters[1] = new Goomba(stage, objectsStage, 1, 350, 370, 1);
-    this.characters[2] = new Koopa(stage, objectsStage, 2, 400, 370, -1);
-    this.characters[3] = new Koopa(stage, objectsStage, 3, 200, 370, -1);
-    this.characters[4] = new Koopa(stage, objectsStage, 4, 470, 370, 1);
-    this.characters[5] = new Bullet(stage, objectsStage, 5, -25, 225, -1);
-    this.characters[6] = new PiranhaPlant(objectsStage, objectsStage, 6, 236, 370);
-    this.currentId = 7;
+    this.startPositions();
     this.mario = new Mario(stage, objectsStage, textCanvas, this);
     this.handleCharacterCollision = this.handleCharacterCollision.bind(this);
   }
@@ -26,6 +19,13 @@ class CharactersStage {
     });
   }
 
+  handleLevelClear() {
+    Object.keys(this.characters).forEach((character) => {
+      if (typeof this.characters[character].handleLevelClear === "function" ) {
+        this.characters[character].handleLevelClear();
+      }
+    });
+  }
   addCharacters() {
     let randomNum = Math.random();
     let scaleX, x;
@@ -109,6 +109,15 @@ class CharactersStage {
         alert('error');
     }
   }
-
+  startPositions() {
+    this.characters = {};
+    this.characters[1] = new Goomba(this.stage, this.objectsStage, 1, 350, 370, 1);
+    this.characters[2] = new Koopa(this.stage, this.objectsStage, 2, 400, 370, -1);
+    this.characters[3] = new Koopa(this.stage, this.objectsStage, 3, 200, 370, -1);
+    this.characters[4] = new Koopa(this.stage, this.objectsStage, 4, 470, 370, 1);
+    this.characters[5] = new Bullet(this.stage, this.objectsStage, 5, -25, 225, -1);
+    this.characters[6] = new PiranhaPlant(this.objectsStage, this.objectsStage, 6, 236, 370);
+    this.currentId = 7;
+  }
 }
 export default CharactersStage;

@@ -27,6 +27,10 @@ class Koopa extends Character{
     this.loader.loadManifest(manifest, true, "./app/assets/images/");
   }
 
+  handleLevelClear() {
+    this.active = false;
+    this.shell = false;
+  }
   handleTick(){
     if (this.shell) {
       this.shellConstant = 6;

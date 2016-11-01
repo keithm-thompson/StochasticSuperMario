@@ -113,9 +113,10 @@ class Mario extends Character {
           Object.keys(objectCollisionX).forEach((id) => {
             if (objectCollisionY[id]) {
               if (this.distanceBetween(objectCollisionX[id], objectCollisionY[id])) {
-                if (this.mario.y + this.mario.height <= objectCollisionY[id][0] + 5) {
+                if (this.mario.y + this.mario.height <= objectCollisionY[id][0] - this.verVel) {
                   if (this.verVel < 0 ) {
                     this.verVel = 0;
+                    this.mario.y = objectCollisionY[id][0] - this.mario.height;
                   }
                 } else if (this.mario.y + this.mario.height >= objectCollisionY[id][1]) {
                   if(this.verVel > 0) {
@@ -139,17 +140,17 @@ class Mario extends Character {
             if (characterCollisionY[id]) {
               if (this.distanceBetween(characterCollisionX[id], characterCollisionY[id])) {
                 if (characterCollisionY[id][2] == "koopa" || characterCollisionY[id][2] == "goomba") {
-                  if (this.mario.y + this.mario.height <= characterCollisionY[id][0] + 5) {
+                  if (this.mario.y + this.mario.height <= characterCollisionY[id][0] - this.verVel) {
                     this.charactersStage.handleCharacterCollision(id, characterCollisionY[id][2]);
                     this.score = this.textCanvas.renderText(this.lives, this.score, 500);
-                    this.mario.y -= 30;
+                    this.mario.y -= 40;
                   } else {
                     this.lives -= 1;
                     this.score = this.textCanvas.renderText(this.lives, this.score, 0);
                     this.handleCharacterCollision();
                   }
                 }
-                else if (this.mario.y + this.mario.height <= characterCollisionY[id][0] - 25) {
+                else if (this.mario.y + this.mario.height <= characterCollisionY[id][0]) {
                   this.lives -= 1;
                   this.score = this.textCanvas.renderText(this.lives, this.score, 0);
                   this.charactersStage.handleCharacterCollision(id, characterCollisionY[id][2]);
@@ -212,17 +213,17 @@ class Mario extends Character {
 
   distanceBetween(xCoords, yCoords) {
     if (this.mario.scaleX === 1) {
-      if (((this.mario.x >= xCoords[0] && this.mario.x <= xCoords[1]) ||
-      (this.mario.x + this.mario.width >= xCoords[0] && this.mario.x + this.mario.width <= xCoords[1])) &&
-      (this.mario.y >= yCoords[0] && this.mario.y <= yCoords[1]) ||
-      (this.mario.y + this.mario.height >= yCoords[0] && this.mario.y + this.mario.height <= yCoords[1])) {
+      if (((this.mario.x + this.horVel >= xCoords[0] && this.mario.x + this.horVel <= xCoords[1]) ||
+      (this.mario.x + this.mario.width + this.horVel >= xCoords[0] && this.mario.x + this.mario.width + this.horVel <= xCoords[1])) &&
+      ((this.mario.y >= yCoords[0]  && this.mario.y <= yCoords[1]) ||
+      (this.mario.y + this.mario.height - this.verVel >= yCoords[0] && this.mario.y + this.mario.height <= yCoords[1]))) {
         return true;
       }
     } else {
-      if (((this.mario.x >= xCoords[0] && this.mario.x <= xCoords[1]) ||
-      (this.mario.x - this.mario.width >= xCoords[0] && this.mario.x - this.mario.width <= xCoords[1])) &&
-      (this.mario.y >= yCoords[0] && this.mario.y <= yCoords[1]) ||
-      (this.mario.y + this.mario.height >= yCoords[0] && this.mario.y + this.mario.height <= yCoords[1])) {
+      if (((this.mario.x - this.horVel >= xCoords[0] && this.mario.x - this.horVel <= xCoords[1]) ||
+      (this.mario.x - this.mario.width - this.horVel >= xCoords[0] && this.mario.x - this.mario.width - this.horVel <= xCoords[1])) &&
+      ((this.mario.y >= yCoords[0] && this.mario.y <= yCoords[1]) ||
+      (this.mario.y + this.mario.height - this.verVel >= yCoords[0] && this.mario.y + this.mario.height <= yCoords[1]))) {
         return true;
       }
     }
@@ -247,11 +248,20 @@ class Mario extends Character {
   }
   handleDeath() {
     this.mario.gotoAndStop("dead");
-    this.mario.gotoAndPlay("stand");
+
     this.mario.x = 50;
     this.mario.y = 331;
+    this.stage.removeAllChildren();
+    this.mario.gotoAndPlay("revived");
+    window.setTimeout(() => {
+      this.stage.addChild(this.mario);
+      this.mario.gotoAndStop("revived");
+      this.mario.gotoAndPlay("stand");
+    }, 500);
+    this.charactersStage.handleLevelClear();
+    this.intervalTreeX.reset();
+    this.intervalTreeY.reset();
     this.active = true;
-    this.stage.addChild(this.mario);
   }
 
   handleEndOfGame() {
@@ -278,7 +288,8 @@ class Mario extends Character {
         stand: 0,
         run: [1,3, "run", .2],
         jump: [4, 4, "jump"],
-        dead: [5, 6, "dead", .5]
+        dead: [5, 6, "dead", .5],
+        revived: [0, 6, 0, "revived", .5]
       },
     };
     let spriteSheet = new createjs.SpriteSheet(spriteData);
@@ -328,12 +339,12 @@ class Mario extends Character {
         } else if (this.horVel < 6){
         this.horVel += Mario.HORVEL;
         }
-      } else if (this.keys[key] === "jump" && this.numJumps < 2) {
-        this.verVel += 35;
-        this.numJumps += 1;
-        if (this.numJumps == 2) {
-          this.shouldDecelerateVertically = true;
-        }
+      } else if (this.keys[key] === "jump" && this.numJumps < 2 && this.verVel <= 25) {
+          this.verVel += 35;
+          this.numJumps += 1;
+          if (this.numJumps === 2) {
+            this.shouldDecelerateVertically = true;
+          }
       }
     }
   }

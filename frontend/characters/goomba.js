@@ -27,6 +27,10 @@ class Goomba extends Character{
     this.loader.loadManifest(manifest, true, "./app/assets/images/");
   }
 
+  handleLevelClear() {
+    this.active = false;
+  }
+  
   handleTick(){
     if( Date.now() - this.tick > window.tickDelay ) {
       if(this.active && !this.isMarioMoving) {

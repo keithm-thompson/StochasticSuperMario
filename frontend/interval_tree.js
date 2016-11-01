@@ -11,6 +11,16 @@ class IntervalTree {
     this.parent = parent;
   }
 
+  reset() {
+    this.min = -1000;
+    this.max = -1000;
+    this.lowerTree = null;
+    this.higherTree = null;
+    this.overlappingIntervals = {};
+    this.overlappingIntervals[0] = [-1000, -1000, "canvas"];
+    this.parent = null;
+  }
+
   query(min, max){
     if(max < this.min) {
       return this.lowerTree ?  this.lowerTree.query(min, max) : null;
@@ -99,10 +109,10 @@ class IntervalTree {
             let replacementNode = this.removeTwoChildrenNode(this.higherTree, this);
             replacementNode.removeInterval(min, max, character, id)
             if (replacementNode) {
-              if (max > this.max && this.higherTree) {
+              if (this.higherTree) {
                 this.higherTree.removeInterval(min, max, character, id);
               }
-              if (min < this.min && this.lowerTree) {
+              if (this.lowerTree) {
                 this.lowerTree.removeInterval(min, max, character, id);
               }
               this.min = replacementNode.min;
@@ -116,9 +126,7 @@ class IntervalTree {
               }
             }
           } else if (this.lowerTree && this.lowerTree.min) {
-            if (min < this.min) {
-              this.lowerTree.removeInterval(min, max, character, id);
-            }
+            this.lowerTree.removeInterval(min, max, character, id);
             if (this.lowerTree) {
               this.min = this.lowerTree.min;
               this.max = this.lowerTree.max;
@@ -134,9 +142,7 @@ class IntervalTree {
             }
 
           } else if (this.higherTree && this.higherTree.min) {
-             if (max > this.max) {
-                this.higherTree.removeInterval(min, max, character, id);
-             }
+              this.higherTree.removeInterval(min, max, character, id);
              if (this.higherTree) {
                this.min = this.higherTree.min;
                this.max = this.higherTree.max;
@@ -158,10 +164,10 @@ class IntervalTree {
            }
          }
        } else {
-        if (max > this.max && this.higherTree) {
+        if (this.higherTree) {
           this.higherTree.removeInterval(min, max, character, id);
         }
-        if (min < this.min && this.lowerTree) {
+        if (this.lowerTree) {
           this.lowerTree.removeInterval(min, max, character, id);
         }
        }

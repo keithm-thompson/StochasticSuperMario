@@ -48,7 +48,8 @@ export function menu(){
 export function gameEnded(score) {
   const high_scores = document.getElementById("high-scores");
   if (high_scores.dataset.length < 10) {
-
+    const highScoreDiv = document.getElementById("high-score")
+    highScoreDiv.className= "menu";
   } else if (score > parseInt(high_scores.lastChild.previousSibling.innerHTML.split(':')[1])) {
       high_scores.lastChild.previousSibling.dataset.id
   }

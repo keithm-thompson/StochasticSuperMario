@@ -10,7 +10,7 @@ table, caption, tbody, tfoot, thead, tr, th, td,
 article, aside, canvas, details, embed,
 figure, figcaption, footer, header, hgroup,
 menu, nav, output, ruby, section, summary,
-time, mark, audio, video, button {
+time, mark, audio, video, button, input {
 	margin: 0;
 	padding: 0;
 	border: 0;
@@ -218,5 +218,18 @@ table {
 
 .hidden {
 	display: none !important;
+}
+
+.initials-input {
+	background-color: black;
+	width: 25%;
+	height: 36px;
+	color: lightblue;
+	display: block;
+	margin: 0 auto;
+	margin-top: 40px;
+	margin-bottom: 40px;
+	font-size: 36px;
+	text-align: center;
 }
 /*# sourceMappingURL=canvas.css.map */
