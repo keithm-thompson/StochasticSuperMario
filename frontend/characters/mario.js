@@ -150,7 +150,8 @@ class Mario extends Character {
                     this.handleCharacterCollision();
                   }
                 }
-                else if (this.mario.y + this.mario.height <= characterCollisionY[id][0]) {
+                else if (this.mario.y + this.mario.height <= characterCollisionY[id][0] + 5) {
+                  debugger
                   this.lives -= 1;
                   this.score = this.textCanvas.renderText(this.lives, this.score, 0);
                   this.charactersStage.handleCharacterCollision(id, characterCollisionY[id][2]);
