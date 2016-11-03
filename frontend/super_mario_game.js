@@ -2,7 +2,7 @@ import Background from './background';
 import TextCanvas from './text_canvas';
 import CharactersStage from './characters_stage';
 import ObjectsStage from './objects_stage';
-import recordHighscore from '../util/util';
+import { recordHighscore }from '../util/util';
 
 
 function startGame() {
@@ -71,15 +71,22 @@ export function gameEnded(score) {
   inputInitials.addEventListener("submit", handleSubmit(score));
 
   if (high_scores.dataset.length < 10) {
-    highScoreDiv.className= "menu";
+    highScoreDiv.className = "menu";
   } else if (score > parseInt(high_scores.lastChild.previousSibling.innerHTML.split(':')[1])) {
-    highScoreDiv.className= "menu";
+    highScoreDiv.className = "menu";
   }
 }
 
 function handleSubmit(score) {
   return (e) => {
+    const success = () => {
+      location.reload();
+    };
+    const error = () => alert("an error has occurred");
+
     e.preventDefault();
-    recordHighscore(document.getElementById("input-initials").value, score);
+    if (document.getElementById("input-initials").value.length > 0) {
+      recordHighscore(document.getElementById("input-initials").value, score, success, error);
+    }
   };
 }

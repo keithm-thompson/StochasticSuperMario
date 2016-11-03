@@ -2,14 +2,14 @@
   <head>
     <title>Stochastic Mario!</title>
     <script type="application/javascript" src="app/assets/javascripts/bundle.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
     <script src="https://code.createjs.com/easeljs-0.8.2.min.js"></script>
     <script src="https://code.createjs.com/preloadjs-0.6.2.min.js"></script>
     <link rel="stylesheet" type="text/css" href="app/assets/stylesheets/canvas.css"/>
   </head>
 
   <body class="body">
-    <% @high_scores.sort! { |el1, el2| el2.score <=> el1.score } %>
-    <% @high_scores = [{ id: 1, initials: "keith", score: 1024 }]%>
+    <% @high_scores.sort! { |el1, el2| el2.attributes[:score].to_i <=> el1.attributes[:score].to_i } %>
     <div id="screen-container" style="position: relative;">
       <div class="title">
         <h1> StochasticSuperMario </h1>
@@ -64,15 +64,18 @@
         <br>
         <ul id="high-scores" data-length="<%= @high_scores.length%>">
           <% @high_scores.each_with_index do |score, idx| %>
-          <li data-id="<%= score[:id] %>"><%= idx + 1 %>. <%= score[:initials] %>: <%= score[:score] %></li>
+          <li data-id="<%= score.attributes[:id] %>"><%= idx + 1 %>. <%= score.attributes[:initials] %>: <%= score.attributes[:score] %></li>
           <% end %>
         </ul>
       </div>
       <div class="developer-information">
-        <h3> A project by Keith Thompson </h3>
+        <ul>
+          <li> A project by Keith Thompson </li>
+          <li> View my website! <a href="https://keithmthompson.com/" target="_blank"> keithmthompson.com </a> </li>
+        </ul>
         <ul>
           <li> Checkout the Git repository! <a href="https://www.github.com/keithm-thompson/StochasticSuperMario" target="_blank"> StochasticSuperMario </a></li>
-          <li> View my website! <a href="https://keithmthompson.com/" target="_blank"> www.keithmthompson.com </a> </li>
+          <li> Built on <a href="https://www.github.com/keithm-thompson/Bezel" target="_blank"> Bezel </a>, my lightweight MVC framework</li>
         </ul>
       </div>
     <div>

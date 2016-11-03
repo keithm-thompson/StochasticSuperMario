@@ -265,6 +265,10 @@ class Mario extends Character {
   }
 
   handleEndOfGame() {
+    this.intervalTreeX.reset();
+    this.intervalTreeY.reset();
+    this.objectIntervalTreeX.reset();
+    this.objectIntervalTreeY.reset();
     gameEnded(this.score);
   }
 
@@ -336,10 +340,10 @@ class Mario extends Character {
           this.mario.scaleX = -1;
           this.mario.x += this.mario.width;
           this.horVel = 3;
-        } else if (this.horVel < 6){
+        } else if (this.horVel < 9){
         this.horVel += Mario.HORVEL;
         }
-      } else if (this.keys[key] === "jump" && this.numJumps < 2 && this.verVel <= 25) {
+      } else if (this.keys[key] === "jump" && this.numJumps < 2 && this.verVel <= 15) {
           this.verVel += 35;
           this.numJumps += 1;
           if (this.numJumps === 2) {

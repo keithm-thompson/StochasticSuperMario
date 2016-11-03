@@ -6,11 +6,13 @@ class MarioController < Bezel::ControllerBase
   end
 
   def update
-    if params['id']
-      score = Score.find(params['id'])
-      score.update
+    scores = Score.all
+    if scores.length >= 10
+      scores = Score.sort!{ |el1, el2| el2.score <=> el1.score }
+      score = scores.last
+      score.update(initials: params['initials'], score: params['score'])
     else
-      score = Score.new(initials: params['name'], score: params['score'])
+      score = Score.new(initials: params['initials'], score: params['score'])
       score.save
     end
     redirect_to '/'
