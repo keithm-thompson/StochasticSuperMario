@@ -4,7 +4,6 @@ A retro styled super mario game with a randomly generated level. [Play Now!] (ht
 Built on [Bezel] (https://github.com/keithm-thompson/Bezel) my lightweight MVC framework.  
 
 ![SuperMario](/docs/welcome.png)
-Format: ![Alt Text](url)
 
 ## How To Play
 
