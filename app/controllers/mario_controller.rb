@@ -8,9 +8,11 @@ class MarioController < Bezel::ControllerBase
   def update
     scores = Score.all
     if scores.length >= 10
-      scores = Score.sort!{ |el1, el2| el2.score <=> el1.score }
+      scores.sort!{ |el1, el2| el2.score <=> el1.score }
       score = scores.last
-      score.update(initials: params['initials'], score: params['score'])
+      score.initials = params['initials']
+      score.score = params['score']
+      score.update
     else
       score = Score.new(initials: params['initials'], score: params['score'])
       score.save
