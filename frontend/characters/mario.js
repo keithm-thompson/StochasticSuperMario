@@ -72,7 +72,6 @@ class Mario extends Character {
   }
 
   handleTick(){
-    // if( Date.now() - this.tick > window.tickDelay) {
       if(this.active) {
         if (this.shouldDecelerateHorizontally && this.horVel > 0) {
           this.horVel -= 3;

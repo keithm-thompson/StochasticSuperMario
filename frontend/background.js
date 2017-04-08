@@ -49,36 +49,6 @@ class Background {
       );
     }
   }
-  // renderClouds() {
-  //   for(let i = 0; i < 6; i++) {
-  //     this.ctx.drawImage(
-  //       this.cloud.image,
-  //       0,
-  //       322,
-  //       this.cloud.width,
-  //       this.cloud.height,
-  //       Math.random() * Background.WIDTH,
-  //       Math.random() * (Background.HEIGHT - (10 * this.cloud.height)),
-  //       this.cloud.width,
-  //       this.cloud.height
-  //     );
-  //   }
-  // }
-  // renderGrass() {
-  //   for(let i = 0; i < 4; i++) {
-  //     this.ctx.drawImage(
-  //       this.grass.image,
-  //       185,
-  //       145,
-  //       this.grass.width,
-  //       this.grass.height,
-  //       Math.random() * Background.WIDTH ,
-  //       Background.HEIGHT - (2 * this.floor.height) - this.grass.height,
-  //       this.grass.width,
-  //       this.grass.height
-  //     );
-  //   }
-  // }
 }
 
 Background.WIDTH = 700;
