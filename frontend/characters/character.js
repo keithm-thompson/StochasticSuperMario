@@ -4,6 +4,7 @@ import {
     objectIntervalTreeX,
     objectIntervalTreeY
   } from '../interval_tree';
+  
 class Character {
   constructor(objectsStage) {
     this.objectsStage = objectsStage;

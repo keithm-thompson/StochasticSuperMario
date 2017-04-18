@@ -39,16 +39,7 @@ export default class Block extends MarioObject {
 
     let spriteSheet = new createjs.SpriteSheet(spriteData);
     this.block = new createjs.Sprite(spriteSheet);
-    this.block.x = this.pos[0];
-    this.block.y = this.pos[1];
-    this.block.width = 15;
-    this.block.height = 15;
-    this.intervalTreeX.insertInterval(this.block.x, this.block.x + this.block.width, "block", this.id);
-    this.intervalTreeY.insertInterval(this.block.y, this.block.y + this.block.height, "block", this.id);
-    this.active = true;
-    this.stage.addChild(this.block);
-    this.block.gotoAndPlay("objectLight");
-     ;
+    this.addBlockToScreen();
   }
 
   handleMovingThroughLevel(horVel) {
@@ -67,10 +58,20 @@ export default class Block extends MarioObject {
 
   handleObjectCollision() {
     this.block.y -= 5;
-     ;
     window.setTimeout(() => {
       this.block.y += 5;
-       ;
     }, 250);
+  }
+
+  addBlockToScreen(){
+    this.block.x = this.pos[0];
+    this.block.y = this.pos[1];
+    this.block.width = 15;
+    this.block.height = 15;
+    this.intervalTreeX.insertInterval(this.block.x, this.block.x + this.block.width, "block", this.id);
+    this.intervalTreeY.insertInterval(this.block.y, this.block.y + this.block.height, "block", this.id);
+    this.active = true;
+    this.stage.addChild(this.block);
+    this.block.gotoAndPlay("objectLight");
   }
 }

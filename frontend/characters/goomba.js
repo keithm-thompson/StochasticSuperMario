@@ -30,15 +30,11 @@ class Goomba extends Character{
   handleLevelClear() {
     this.active = false;
   }
-  
+
   handleTick(){
     if( Date.now() - this.tick > window.tickDelay ) {
       if(this.active && !this.isMarioMoving) {
-        this.intervalTreeX.removeInterval(this.goomba.x, this.goomba.x + this.goomba.width, "goomba", this.id);
-        this.intervalTreeY.removeInterval(this.goomba.y, this.goomba.y + this.goomba.height, "goomba", this.id);
-        this.goomba.x += this.goomba.direction;
-        this.intervalTreeX.insertInterval(this.goomba.x, this.goomba.x + this.goomba.width, "goomba", this.id);
-        this.intervalTreeY.insertInterval(this.goomba.y, this.goomba.y + this.goomba.height, "goomba", this.id);
+        this.updateIntervalTrees(0);
         this.detectObjectCollision();
       } else {
         this.isMarioMoving = false;
@@ -73,28 +69,26 @@ class Goomba extends Character{
         if (objectCollisionY[object]) {
           this.goomba.direction = -1 * this.goomba.direction;
           if (this.horVel) {
-            this.intervalTreeX.removeInterval(this.goomba.x, this.goomba.x + this.goomba.width, "goomba", this.id);
-            this.goomba.x += this.goomba.direction * (this.horVel + 15);
-            this.intervalTreeX.insertInterval(this.goomba.x, this.goomba.x + this.goomba.width, "goomba", this.id);
+            this.handleObjectCollision();
           }
         }
       });
     }
   }
 
+  handleObjectCollision() {
+    this.intervalTreeX.removeInterval(this.goomba.x, this.goomba.x + this.goomba.width, "goomba", this.id);
+    this.goomba.x += this.goomba.direction * (this.horVel + 15);
+    this.intervalTreeX.insertInterval(this.goomba.x, this.goomba.x + this.goomba.width, "goomba", this.id);
+  }
+
   handleMovingThroughLevel(horVel) {
     if (this.active) {
       this.horVel = horVel;
       this.detectObjectCollision();
-      this.intervalTreeX.removeInterval(this.goomba.x, this.goomba.x + this.goomba.width, "goomba", this.id);
-      this.intervalTreeY.removeInterval(this.goomba.y, this.goomba.y + this.goomba.height, "goomba", this.id);
-      this.goomba.x -= horVel - this.goomba.direction ;
-      this.intervalTreeX.insertInterval(this.goomba.x, this.goomba.x + this.goomba.width, "goomba", this.id);
-      this.intervalTreeY.insertInterval(this.goomba.y, this.goomba.y + this.goomba.height, "goomba", this.id);
+      this.updateIntervalTrees(horVel);
       this.isMarioMoving = true;
     }
-
-
   }
 
   imageLoaded() {
@@ -115,6 +109,10 @@ class Goomba extends Character{
     };
     let spriteSheet = new createjs.SpriteSheet(spriteData);
     this.goomba =  new createjs.Sprite(spriteSheet);
+    this.addGoombaToScreen();
+  }
+
+  addGoombaToScreen() {
     this.goomba.y = this.pos[1] - 31;
     this.goomba.x = this.pos[0];
     this.goomba.width = 22;
@@ -124,6 +122,14 @@ class Goomba extends Character{
     this.stage.addChild(this.goomba);
     this.active = true;
     this.goomba.gotoAndPlay("move");
+  }
+
+  updateIntervalTrees(horVel) {
+    this.intervalTreeX.removeInterval(this.goomba.x, this.goomba.x + this.goomba.width, "goomba", this.id);
+    this.intervalTreeY.removeInterval(this.goomba.y, this.goomba.y + this.goomba.height, "goomba", this.id);
+    this.goomba.x -= horVel - this.goomba.direction;
+    this.intervalTreeX.insertInterval(this.goomba.x, this.goomba.x + this.goomba.width, "goomba", this.id);
+    this.intervalTreeY.insertInterval(this.goomba.y, this.goomba.y + this.goomba.height, "goomba", this.id);
   }
 
 }

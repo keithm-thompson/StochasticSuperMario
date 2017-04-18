@@ -31,13 +31,7 @@ class Cloud {
 
     let spriteSheet = new createjs.SpriteSheet(spriteData);
     this.cloud =  new createjs.Sprite(spriteSheet);
-    this.cloud.x = this.pos[0];
-    this.cloud.y = this.pos[1];
-    this.cloud.width = 45;
-    this.cloud.height = 28;
-    this.active = true;
-    this.stage.addChild(this.cloud);
-    this.cloud.gotoAndPlay("object");
+    this.addFloorToScreen();
   }
 
   handleMovingThroughLevel(horVel) {
@@ -49,6 +43,15 @@ class Cloud {
         this.objectsStage.deleteObjects(this.id);
         this.stage.removeChild(this.cloud);
       }
+  }
+  addFloorToScreen() {
+    this.cloud.x = this.pos[0];
+    this.cloud.y = this.pos[1];
+    this.cloud.width = 45;
+    this.cloud.height = 28;
+    this.active = true;
+    this.stage.addChild(this.cloud);
+    this.cloud.gotoAndPlay("object");
   }
 }
 export default Cloud;

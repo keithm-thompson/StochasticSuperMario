@@ -182,7 +182,7 @@ class Mario extends Character {
               this.objectsStage.handleMovingThroughLevel(this.horVel);
               let objectRand = Math.random();
               if (objectRand < .015) {
-                this.objectsStage.addObjects();
+                this.objectsStage.addBlocks();
               } else if (objectRand < .023) {
                 if (objectRand < .018) {
                   this.charactersStage.addPirahnaPlant();

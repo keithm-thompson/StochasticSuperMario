@@ -63,21 +63,21 @@ class CharactersStage {
           scaleX
           );
     } else if (randomNum < .5) {
-      if (randomNum < .475) {
-        scaleX = -1;
-        x = -25;
-      } else {
-        scaleX = 1;
-        x = 1130;
-      }
-      this.characters[this.currentId] = new Bullet(
-        this.stage,
-        this,
-        this.currentId,
-        x,
-        Math.random() * (300 - 225) + 225,
-        scaleX
-      );
+        if (randomNum < .475) {
+          scaleX = -1;
+          x = -25;
+        } else {
+          scaleX = 1;
+          x = 1130;
+        }
+        this.characters[this.currentId] = new Bullet(
+          this.stage,
+          this,
+          this.currentId,
+          x,
+          Math.random() * (300 - 225) + 225,
+          scaleX
+        );
     }
     this.currentId++;
   }

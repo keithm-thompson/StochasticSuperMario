@@ -39,17 +39,9 @@ class Koopa extends Character{
       if((this.active || this.shell) && !this.isMarioMoving) {
         this.detectObjectCollision();
         if (this.koopa.scaleX === 1) {
-          this.intervalTreeX.removeInterval(this.koopa.x, this.koopa.x + this.koopa.width, "koopa", this.id);
-          this.intervalTreeY.removeInterval(this.koopa.y, this.koopa.y + this.koopa.height, "koopa", this.id);
-          this.koopa.x -= 1 * this.shellConstant;
-          this.intervalTreeX.insertInterval(this.koopa.x, this.koopa.x + this.koopa.width, "koopa", this.id);
-          this.intervalTreeY.insertInterval(this.koopa.y, this.koopa.y + this.koopa.height, "koopa", this.id);
+          this.moveLeft();
         } else {
-          this.intervalTreeX.removeInterval(this.koopa.x - this.koopa.width, this.koopa.x, "koopa", this.id);
-          this.intervalTreeY.removeInterval(this.koopa.y, this.koopa.y + this.koopa.height, "koopa", this.id);
-          this.koopa.x += 1 * this.shellConstant;
-          this.intervalTreeX.insertInterval(this.koopa.x - this.koopa.width, this.koopa.x, "koopa", this.id);
-          this.intervalTreeY.insertInterval(this.koopa.y, this.koopa.y + this.koopa.height, "koopa", this.id);
+          this.moveRight();
         }
       } else {
         this.isMarioMoving = false;
@@ -93,33 +85,27 @@ class Koopa extends Character{
     if(objectCollisionX && objectCollisionY) {
       Object.keys(objectCollisionX).forEach((object) => {
         if (objectCollisionY[object]) {
-          if (this.horVel) {
-            if (this.koopa.scaleX === 1) {
-              this.intervalTreeX.removeInterval(this.koopa.x, this.koopa.x + this.koopa.width, "koopa", this.id)
-              this.koopa.x += (this.horVel + this.koopa.width + 10);
-              this.intervalTreeX.insertInterval(this.koopa.x, this.koopa.x + this.koopa.width, "koopa", this.id)
-            } else {
-              this.intervalTreeX.removeInterval(this.koopa.x, this.koopa.x + this.koopa.width, "koopa", this.id)
-              this.koopa.x -=  (this.horVel + this.koopa.width + 10);
-              this.intervalTreeX.insertInterval(this.koopa.x, this.koopa.x + this.koopa.width, "koopa", this.id)
-            }
-
+          if (this.koopa.scaleX === 1) {
+            this.handleObjectCollision(1);
           } else {
-            if (this.koopa.scaleX === 1) {
-            this.intervalTreeX.removeInterval(this.koopa.x, this.koopa.x + this.koopa.width, "koopa", this.id)
-            this.koopa.x += (this.koopa.width + 10);
-            this.intervalTreeX.insertInterval(this.koopa.x, this.koopa.x + this.koopa.width, "koopa", this.id)
-          } else {
-            this.intervalTreeX.removeInterval(this.koopa.x, this.koopa.x + this.koopa.width, "koopa", this.id)
-            this.koopa.x -=  (this.koopa.width + 10);
-            this.intervalTreeX.insertInterval(this.koopa.x, this.koopa.x + this.koopa.width, "koopa", this.id)
+            this.handleObjectCollision(-1);
           }
-
-          }
-          this.koopa.scaleX = -1 * this.koopa.scaleX;
         }
       });
     }
+  }
+
+  handleObjectCollision(sign) {
+    if (this.horvel) {
+      this.intervalTreeX.removeInterval(this.koopa.x, this.koopa.x + this.koopa.width, "koopa", this.id)
+      this.koopa.x += (sign * (this.horVel + this.koopa.width + 10));
+      this.intervalTreeX.insertInterval(this.koopa.x, this.koopa.x + this.koopa.width, "koopa", this.id)
+    } else {
+      this.intervalTreeX.removeInterval(this.koopa.x, this.koopa.x + this.koopa.width, "koopa", this.id)
+      this.koopa.x += (sign * (this.koopa.width + 10));
+      this.intervalTreeX.insertInterval(this.koopa.x, this.koopa.x + this.koopa.width, "koopa", this.id)
+    }
+    this.koopa.scaleX = -1 * this.koopa.scaleX;
   }
 
   handleMovingThroughLevel(horVel) {
@@ -156,6 +142,10 @@ class Koopa extends Character{
     };
     let spriteSheet = new createjs.SpriteSheet(spriteData);
     this.koopa =  new createjs.Sprite(spriteSheet);
+    this.addKoopaToScreen();
+  }
+
+  addKoopaToScreen(){
     this.koopa.y = this.pos[1] - 34;
     this.koopa.x = this.pos[0];
     this.koopa.width = 22;
@@ -168,5 +158,20 @@ class Koopa extends Character{
     this.koopa.gotoAndPlay("move");
   }
 
+  moveRight(){
+    this.intervalTreeX.removeInterval(this.koopa.x - this.koopa.width, this.koopa.x, "koopa", this.id);
+    this.intervalTreeY.removeInterval(this.koopa.y, this.koopa.y + this.koopa.height, "koopa", this.id);
+    this.koopa.x += 1 * this.shellConstant;
+    this.intervalTreeX.insertInterval(this.koopa.x - this.koopa.width, this.koopa.x, "koopa", this.id);
+    this.intervalTreeY.insertInterval(this.koopa.y, this.koopa.y + this.koopa.height, "koopa", this.id);
+  }
+
+  moveLeft(){
+    this.intervalTreeX.removeInterval(this.koopa.x, this.koopa.x + this.koopa.width, "koopa", this.id);
+    this.intervalTreeY.removeInterval(this.koopa.y, this.koopa.y + this.koopa.height, "koopa", this.id);
+    this.koopa.x -= 1 * this.shellConstant;
+    this.intervalTreeX.insertInterval(this.koopa.x, this.koopa.x + this.koopa.width, "koopa", this.id);
+    this.intervalTreeY.insertInterval(this.koopa.y, this.koopa.y + this.koopa.height, "koopa", this.id);
+  }
 }
 export default Koopa;

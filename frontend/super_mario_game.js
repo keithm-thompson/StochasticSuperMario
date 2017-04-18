@@ -11,20 +11,7 @@ function startGame() {
   const charactersCanvas = document.getElementById("characters-canvas");
   const objectsCanvas = document.getElementById("objects-canvas");
 
-  backgroundCanvas.className = "";
-  textCanvas.className = "" ;
-  charactersCanvas.className = "" ;
-  objectsCanvas.className = "" ;
-
-  backgroundCanvas.width = Background.WIDTH;
-  textCanvas.width = Background.WIDTH;
-  charactersCanvas.width = Background.WIDTH;
-  objectsCanvas.width = Background.WIDTH;
-
-  backgroundCanvas.height = Background.HEIGHT;
-  textCanvas.height = Background.HEIGHT;
-  charactersCanvas.height = Background.HEIGHT;
-  objectsCanvas.height = Background.HEIGHT;
+  initializeCanvasObjects(backgroundCanvas, textCanvas, charactersCanvas, objectsCanvas);
 
   const backgroundCtx = backgroundCanvas.getContext("2d");
   const charactersCtx = charactersCanvas.getContext("2d");
@@ -57,10 +44,7 @@ export function gameEnded(score) {
   const charactersCanvas = document.getElementById("characters-canvas");
   const objectsCanvas = document.getElementById("objects-canvas");
 
-   backgroundCanvas.className = "hidden";
-   textCanvas.className = "hidden" ;
-   charactersCanvas.className = "hidden" ;
-   objectsCanvas.className = "hidden" ;
+  hideCanvasObjects(backgroundCanvas, textCanvas, charactersCanvas, objectsCanvas);
 
   const high_scores = document.getElementById("high-scores");
   const highScoreDiv = document.getElementById("high-score");
@@ -74,6 +58,20 @@ export function gameEnded(score) {
     highScoreDiv.className = "menu";
   } else if (score > parseInt(high_scores.lastChild.previousSibling.innerHTML.split(':')[1])) {
     highScoreDiv.className = "menu";
+  }
+}
+
+function initializeCanvasObjects(...canvasObjects) {
+  for(let i = 0; i < canvasObjects.length; i++) {
+    canvasObjects[i].className = "";
+    canvasObjects[i].width = Background.WIDTH;
+    canvasObjects[i].width = Background.HEIGHT;
+  }
+}
+
+function hideCanvasObjects(...canvasObjects) {
+  for(let i = 0; i < canvasObjects.length; i++){
+    canvasObjects[i].className = "hidden";
   }
 }
 

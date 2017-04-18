@@ -8,6 +8,13 @@ class ObjectsStage {
   constructor(stage){
     this.stage = stage;
     this.objects = {};
+    this.initializeObjectsOnStage();
+    this.lastItemAdded  = null;
+    this.initialBackground();
+    this.addBackground();
+  }
+
+  initializeObjectsOnStage(){
     this.objects[1] = new WarpPipe(stage, 1, 230, 370, this);
     this.objects[2] = new Block(stage, 2,  200, 250, this);
     this.objects[3] = new Block(stage, 3, 217, 250, this);
@@ -15,9 +22,6 @@ class ObjectsStage {
     this.objects[6] = new Block(stage, 6, 251, 250, this);
     this.objects[7] = new WarpPipe(stage, 7, 310, 370, this);
     this.currentId = 8;
-    this.lastItemAdded  = null;
-    this.initialBackground();
-    this.addBackground();
   }
 
   addChild(child) {
@@ -31,7 +35,7 @@ class ObjectsStage {
     }
   }
 
-  addObjects() {
+  addBlocks() {
     let height  = Math.floor(Math.random() * (250 - 220)) + 220;
     let randomNum = Math.random();
     if (randomNum < .2) {
@@ -41,27 +45,27 @@ class ObjectsStage {
                                                  1100 + (i * 16),
                                                  height,
                                                  this);
-      this.currentId++;
+        this.currentId++;
       }
     } else if (randomNum < .45) {
-      for (let i = 0; i < 4; i++) {
-        this.objects[this.currentId] = new Block(this.stage,
-          this.currentId,
-          1100 + (i * 16),
-          height,
-          this);
+        for (let i = 0; i < 4; i++) {
+          this.objects[this.currentId] = new Block(this.stage,
+            this.currentId,
+            1100 + (i * 16),
+            height,
+            this);
           this.currentId++;
-      }
-      this.lastItemAdded = "block";
+        }
+        this.lastItemAdded = "block";
     } else if(randomNum < .75) {
-      for (var i = 0; i < 3; i++) {
-        this.objects[this.currentId] = new Block(this.stage,
-          this.currentId,
-          1100 + (i * 16),
-          height,
-          this);
+        for (var i = 0; i < 3; i++) {
+          this.objects[this.currentId] = new Block(this.stage,
+            this.currentId,
+            1100 + (i * 16),
+            height,
+            this);
           this.currentId++;
-      }
+        }
     }
     this.currentId++;
   }

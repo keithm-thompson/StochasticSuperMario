@@ -23,36 +23,36 @@ class IntervalTree {
 
   query(min, max){
     if(max < this.min) {
-      return this.lowerTree ?  this.lowerTree.query(min, max) : null;
+        return this.lowerTree ?  this.lowerTree.query(min, max) : null;
     } else if (min > this.max) {
-      return this.higherTree ?  this.higherTree.query(min, max) : null;
+        return this.higherTree ?  this.higherTree.query(min, max) : null;
     } else {
-      if (this.overlappingIntervals && Object.keys(this.overlappingIntervals).length === 1 && this.overlappingIntervals[0]) {
-        let lowerTreeIntervals, higherTreeIntervals;
-        if (this.lowerTree) {
-          lowerTreeIntervals = this.lowerTree.query(min, max);
-        }
-        if (this.higherTree) {
-          higherTreeIntervals = this.higherTree.query(min, max);
-        }
-        if (lowerTreeIntervals && higherTreeIntervals) {
-          return Object.assign(lowerTreeIntervals, higherTreeIntervals);
-        } else if (lowerTreeIntervals) {
-          return lowerTreeIntervals;
-        } else if (higherTreeIntervals) {
-          return higherTreeIntervals;
-        } else {
-          return null;
-        }
+        if (this.overlappingIntervals && Object.keys(this.overlappingIntervals).length === 1 && this.overlappingIntervals[0]) {
+          let lowerTreeIntervals, higherTreeIntervals;
+          if (this.lowerTree) {
+            lowerTreeIntervals = this.lowerTree.query(min, max);
+          }
+          if (this.higherTree) {
+            higherTreeIntervals = this.higherTree.query(min, max);
+          }
+          if (lowerTreeIntervals && higherTreeIntervals) {
+              return Object.assign(lowerTreeIntervals, higherTreeIntervals);
+          } else if (lowerTreeIntervals) {
+              return lowerTreeIntervals;
+          } else if (higherTreeIntervals) {
+              return higherTreeIntervals;
+          } else {
+              return null;
+          }
       }
         if (min < this.min && max > this.max && this.lowerTree && this.higherTree) {
-        return merge({}, this.overlappingIntervals, this.lowerTree.query(min, max), this.higherTree.query(min, max));
+          return merge({}, this.overlappingIntervals, this.lowerTree.query(min, max), this.higherTree.query(min, max));
       } else if (min < this.min && this.lowerTree) {
-        return merge({}, this.overlappingIntervals, this.lowerTree.query(min, max));
+          return merge({}, this.overlappingIntervals, this.lowerTree.query(min, max));
       } else if (max > this.max && this.higherTree) {
-        return merge({}, this.overlappingIntervals, this.higherTree.query(min, max));
+          return merge({}, this.overlappingIntervals, this.higherTree.query(min, max));
       } else {
-        return this.overlappingIntervals;
+          return this.overlappingIntervals;
       }
     }
   }
@@ -115,9 +115,7 @@ class IntervalTree {
               if (this.lowerTree) {
                 this.lowerTree.removeInterval(min, max, character, id);
               }
-              this.min = replacementNode.min;
-              this.max = replacementNode.max;
-              this.overlappingIntervals = replacementNode.overlappingIntervals;
+              this.replaceNode(replacementNode);
             } else {
               if (this.parent.lowerTree == this) {
                 this.parent.lowerTree = null;
@@ -128,9 +126,7 @@ class IntervalTree {
           } else if (this.lowerTree && this.lowerTree.min) {
             this.lowerTree.removeInterval(min, max, character, id);
             if (this.lowerTree) {
-              this.min = this.lowerTree.min;
-              this.max = this.lowerTree.max;
-              this.overlappingIntervals = this.lowerTree.overlappingIntervals;
+              this.replaceNode(this.lowerTree)
               this.higherTree = this.lowerTree.higherTree;
               this.lowerTree = this.lowerTree.lowerTree;
             } else {
@@ -140,15 +136,12 @@ class IntervalTree {
                   this.parent.higherTree = null;
                 }
             }
-
           } else if (this.higherTree && this.higherTree.min) {
               this.higherTree.removeInterval(min, max, character, id);
              if (this.higherTree) {
-               this.min = this.higherTree.min;
-               this.max = this.higherTree.max;
-               this.overlappingIntervals = this.higherTree.overlappingIntervals;
-               this.lowerTree = this.higherTree.lowerTree;
-               this.higherTree = this.higherTree.higherTree;
+                this.replaceNode(this.higherTree)
+                this.lowerTree = this.higherTree.lowerTree;
+                this.higherTree = this.higherTree.higherTree;
              } else {
                if (this.parent.lowerTree == this) {
                  this.parent.lowerTree = null;
@@ -172,6 +165,12 @@ class IntervalTree {
         }
        }
      }
+  }
+
+  replaceNode(otherNode) {
+    this.min = otherNode.min;
+    this.max = otherNode.max;
+    this.overlappingIntervals = otherNode.overlappingIntervals;
   }
 
   removeTwoChildrenNode(node, parent) {

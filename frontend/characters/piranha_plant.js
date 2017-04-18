@@ -28,19 +28,9 @@ class PiranhaPlant extends Character {
     if(this.active) {
       this.intervalTreeY.removeInterval(this.piranhaPlant.y + 10, this.piranhaPlant.y + this.piranhaPlant.height, "piranhaPlant", this.id);
       if(this.piranhaPlant.y <= this.pos[1] - 90) {
-        this.move = false;
-        this.piranhaPlant.y += 1;
-        window.setTimeout(() => {
-          this.direction = 1;
-          this.move = true;
-        }, 750);
+          this.moveUpward();
       } else if (this.piranhaPlant.y >= this.pos[1] - 45) {
-        this.move = false;
-        this.piranhaPlant.y -= 1;
-        window.setTimeout(() => {
-          this.direction = -1;
-          this.move = true;
-        }, 1000);
+          this.moveDownward();
       }
       if (this.move) {
         this.piranhaPlant.y += Number(this.direction) * 1;
@@ -78,6 +68,10 @@ class PiranhaPlant extends Character {
     };
     let spriteSheet = new createjs.SpriteSheet(spriteData);
     this.piranhaPlant =  new createjs.Sprite(spriteSheet);
+    this.addPiranhaPlantToScreen();
+  }
+
+  addPiranhaPlantToScreen(){
     this.piranhaPlant.y = this.pos[1] - 90;
     this.piranhaPlant.x = this.pos[0];
     this.piranhaPlant.width = 20;
@@ -87,6 +81,25 @@ class PiranhaPlant extends Character {
     this.stage.addChild(this.piranhaPlant);
     this.piranhaPlant.gotoAndPlay("move");
     this.stage.setChildIndex(this.piranhaPlant, 0);
+  }
+
+  moveUpward(){
+    this.move = false;
+    this.piranhaPlant.y += 1;
+    window.setTimeout(() => {
+      this.direction = 1;
+      this.move = true;
+    }, 750);
+  }
+
+
+  moveDownward(){
+    this.move = false;
+    this.piranhaPlant.y -= 1;
+    window.setTimeout(() => {
+      this.direction = -1;
+      this.move = true;
+    }, 1000);
   }
 
 }

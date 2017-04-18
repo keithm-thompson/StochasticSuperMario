@@ -31,13 +31,7 @@ class Floor {
 
     let spriteSheet = new createjs.SpriteSheet(spriteData);
     this.floor =  new createjs.Sprite(spriteSheet);
-    this.floor.x = this.pos[0];
-    this.floor.y = this.pos[1];
-    this.floor.width = 32;
-    this.floor.height = 15;
-    this.active = true;
-    this.stage.addChild(this.floor);
-    this.floor.gotoAndPlay("object");
+    this.addFloorToScreen();
   }
 
   handleMovingThroughLevel(horVel) {
@@ -48,6 +42,15 @@ class Floor {
         this.active = false;
         this.objectsStage.deleteObjects(this.id);
       }
+  }
+  addFloorToScreen() {
+    this.floor.x = this.pos[0];
+    this.floor.y = this.pos[1];
+    this.floor.width = 32;
+    this.floor.height = 15;
+    this.active = true;
+    this.stage.addChild(this.floor);
+    this.floor.gotoAndPlay("object");
   }
 }
 export default Floor;

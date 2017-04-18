@@ -29,19 +29,7 @@ class Bullet extends Character {
   handleTick(){
     if( Date.now() - this.tick > window.tickDelay ) {
       if (this.active && !this.isMarioMoving) {
-        if (this.bullet.scaleX === 1) {
-          this.intervalTreeX.removeInterval(this.bullet.x, this.bullet.x + this.bullet.width, "bullet", this.id);
-          this.intervalTreeY.removeInterval(this.bullet.y, this.bullet.y + this.bullet.height, "bullet", this.id);
-          this.bullet.x -= 5;
-          this.intervalTreeX.insertInterval(this.bullet.x, this.bullet.x + this.bullet.width, "bullet", this.id);
-          this.intervalTreeY.insertInterval(this.bullet.y, this.bullet.y + this.bullet.height, "bullet", this.id);
-        } else {
-          this.intervalTreeX.removeInterval(this.bullet.x - this.bullet.width, this.bullet.x, "bullet", this.id);
-          this.intervalTreeY.removeInterval(this.bullet.y, this.bullet.y + this.bullet.height, "bullet", this.id);
-          this.bullet.x += 5;
-          this.intervalTreeX.insertInterval(this.bullet.x - this.bullet.width, this.bullet.x, "bullet", this.id);
-          this.intervalTreeY.insertInterval(this.bullet.y, this.bullet.y + this.bullet.height, "bullet", this.id);
-        }
+        this.updateIntervalTrees(0);
       } else {
         this.isMarioMoving = false;
       }
@@ -64,6 +52,17 @@ class Bullet extends Character {
     };
     let spriteSheet = new createjs.SpriteSheet(spriteData);
     this.bullet =  new createjs.Sprite(spriteSheet);
+    this.addBulletToScreen();
+  }
+
+  handleMovingThroughLevel(horVel) {
+    if (this.active) {
+      this.updateIntervalTrees(horVel);
+      this.isMarioMoving = true;
+    }
+  }
+
+  addBulletToScreen() {
     this.bullet.y = this.pos[1] - 100;
     this.bullet.x = this.pos[0];
     this.bullet.width = 23;
@@ -76,20 +75,23 @@ class Bullet extends Character {
     this.bullet.gotoAndPlay("stand");
   }
 
-  handleMovingThroughLevel(horVel) {
-    if (this.active) {
-      this.intervalTreeX.removeInterval(this.bullet.x, this.bullet.x + this.bullet.width, "bullet", this.id);
-      this.intervalTreeY.removeInterval(this.bullet.y, this.bullet.y + this.bullet.height, "bullet", this.id);
-      if (this.bullet.scaleX == 1) {
-        this.bullet.x -= horVel + 5;
-      } else {
-        this.bullet.x -= horVel - 5;
-      }
-      this.intervalTreeX.insertInterval(this.bullet.x, this.bullet.x + this.bullet.width, "bullet", this.id);
-      this.intervalTreeY.insertInterval(this.bullet.y, this.bullet.y + this.bullet.height, "bullet", this.id);
-      this.isMarioMoving = true;
+  updateIntervalTrees(horVel) {
+    let sign, orientationForward, orientationBackward;
+    if (this.bullet.scaleX === 1) {
+      sign = 1;
+      orientationForward = 0;
+      orientationBackward = this.bullet.width;
+    } else {
+      sign = -1;
+      orientationForward = this.bullet.width;
+      orientationBackward = 0;
     }
-  }
 
+    this.intervalTreeX.removeInterval(this.bullet.x - orientationForward, this.bullet.x + orientationBackward, "bullet", this.id);
+    this.intervalTreeY.removeInterval(this.bullet.y, this.bullet.y + this.bullet.height, "bullet", this.id);
+    this.bullet.x -= horVel + (sign * 5);
+    this.intervalTreeX.insertInterval(this.bullet.x - orientationForward, this.bullet.x + orientationBackward, "bullet", this.id);
+    this.intervalTreeY.insertInterval(this.bullet.y, this.bullet.y + this.bullet.height, "bullet", this.id);
+  }
 }
 export default Bullet;

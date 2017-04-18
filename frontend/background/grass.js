@@ -31,13 +31,7 @@ class Grass {
 
     let spriteSheet = new createjs.SpriteSheet(spriteData);
     this.grass =  new createjs.Sprite(spriteSheet);
-    this.grass.x = this.pos[0];
-    this.grass.y = this.pos[1];
-    this.grass.width = 38;
-    this.grass.height = 15;
-    this.active = true;
-    this.stage.addChild(this.grass);
-    this.grass.gotoAndPlay("object");
+    this.addGrassToScreen();
   }
 
   handleMovingThroughLevel(horVel) {
@@ -48,8 +42,17 @@ class Grass {
         this.active = false;
         this.objectsStage.deleteObjects(this.id);
         this.stage.removeChild(this.grass);
-
       }
+  }
+
+  addGrassToScreen() {
+    this.grass.x = this.pos[0];
+    this.grass.y = this.pos[1];
+    this.grass.width = 38;
+    this.grass.height = 15;
+    this.active = true;
+    this.stage.addChild(this.grass);
+    this.grass.gotoAndPlay("object");
   }
 }
 export default Grass;
