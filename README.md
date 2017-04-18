@@ -1,7 +1,7 @@
 # StochasticSuperMario
-A retro styled super mario game with a randomly generated level. [Play Now!] (https://www.stochasticsupermario.com)  
+A retro styled super mario game with a randomly generated level. [Play Now!](https://www.stochasticsupermario.com)  
   
-Built on [Bezel] (https://github.com/keithm-thompson/Bezel) my lightweight MVC framework.  
+Built on [Bezel](https://github.com/keithm-thompson/Bezel) my lightweight MVC framework.  
 
 ![SuperMario](/docs/welcome.png)
 
